@@ -1,14 +1,11 @@
-
-import './App.css'
-import { ConverterPage } from './ConverterPage/ConverterPage'
+import { ConverterPage } from "./ConverterPage/ConverterPage";
 
 function App() {
-
-  return (
-    <>
-      <ConverterPage />
-    </>
-  )
+    return (
+        <>
+            <ConverterPage />
+        </>
+    );
 }
 
-export default App
+export default App;
