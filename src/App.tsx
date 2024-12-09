@@ -1,12 +1,14 @@
-import React from "react";
-import { ConverterPage } from "./ConverterPage/ConverterPage";
 
-const App: React.FC = () => {
+import './App.css'
+import { ConverterPage } from './ConverterPage/ConverterPage'
+
+function App() {
+
   return (
-    <div className="App">
+    <>
       <ConverterPage />
-    </div>
-  );
-};
+    </>
+  )
+}
 
-export default App;
+export default App

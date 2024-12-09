@@ -1,16 +1,19 @@
 import styled from "styled-components";
 import SineCurve from "./MovingSineComponent";
+import { MarkdownRenderer } from "../MarkdownRenderer";
+import test from "./Text/test.md";
 
 const StyledPage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 export function ConverterPage() {
-  return (
-    <StyledPage>
-      <SineCurve />
-    </StyledPage>
-  );
+    return (
+        <StyledPage>
+            <MarkdownRenderer content={test} />
+            <SineCurve />
+        </StyledPage>
+    );
 }
