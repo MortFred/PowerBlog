@@ -8,18 +8,18 @@ const SineCurve: React.FC = () => {
     const [animationSpeed, setAnimationSpeed] = useState(0.05);
     const [currentAmplitude, setCurrentAmplitude] = useState(50);
 
-    let ACCurrentSignal = 0;
-    let signalWindow = Array(width).fill(0);
-    let signalIndex = 0;
+    let ACCurrentSignal = useRef(0);
+    let signalWindow = useRef(Array(width).fill(0));
+    let signalIndex = useRef(0);
 
     const drawSineCurve = (ctx: CanvasRenderingContext2D) => {
         ctx.clearRect(0, 0, width, height);
         ctx.beginPath();
-        ctx.moveTo(0, height / 2 + signalWindow[signalIndex]);
+        ctx.moveTo(0, height / 2 + signalWindow.current[signalIndex.current]);
 
         for (let x = 1; x < width; x++) {
-            // const index = (signalIndex + x) % width;
-            ctx.lineTo(x, height / 2 + signalWindow[x]);
+            const index = (signalIndex.current + x) % width;
+            ctx.lineTo(x, height / 2 + signalWindow.current[index]);
         }
 
         ctx.strokeStyle = "blue";
@@ -27,9 +27,9 @@ const SineCurve: React.FC = () => {
     };
 
     const animate = (time: number) => {
-        ACCurrentSignal = currentAmplitude * Math.sin(time * animationSpeed * 0.05);
-        signalWindow[signalIndex] = ACCurrentSignal;
-        signalIndex = (signalIndex + 1) % width;
+        ACCurrentSignal.current = currentAmplitude * Math.sin(time * animationSpeed * 0.05);
+        signalWindow.current[signalIndex.current] = ACCurrentSignal.current;
+        signalIndex.current = (signalIndex.current + 1) % width;
 
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
