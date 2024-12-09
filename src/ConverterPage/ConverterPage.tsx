@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import { MarkdownRenderer } from "../MarkdownRenderer";
-import Introduction from "./Text/Introduction.md";
 import { useState } from "react";
 import { HalfWaveRectifiedCurve } from "./HalfWaveRectifier";
 import { VoltageCurve } from "./VoltageSignal";
 
-import BasicRectifier from "./Figures/simple_rectifier.svg";
+import HalfWaveRectifier from "./Figures/half_wave_rectifier.svg";
+import FullWaveRectifierPositive from "./Figures/full-wave_rectifier_1.svg";
+import FullWaveRectifierNegative from "./Figures/full-wave_rectifier_2.svg";
+import Introduction from "./Text/Introduction.md";
+import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
+import FullWaveRectifiers from "./Text/Full-wave_rectifier.md";
+import { FullWaveRectifierCurve } from "./FullWaveRectifier";
 
 const StyledContent = styled.div`
     display: flex;
@@ -29,14 +34,26 @@ const StyledImage = styled.img`
 `;
 
 export function ConverterPage() {
-    const [inputVoltage, setInputVoltage] = useState(0);
+    const [halfWaveInputVoltage, setHalfWaveInputVoltage] = useState(0);
+    const [fullWaveInputVoltage, setFullWaveInputVoltage] = useState(0);
     return (
         <StyledContent>
             <MarkdownRenderer content={Introduction} />
-            <StyledImage src={BasicRectifier} alt="Simple rectifier circui" width={"400px"} />
+            <MarkdownRenderer content={HalfWaveRectifiers} />
+            <StyledImage src={HalfWaveRectifier} alt="Simple rectifier circuit" width={"400px"} />
             <StyledConversionDisplay>
-                <VoltageCurve width={400} setVoltage={setInputVoltage} />
-                <HalfWaveRectifiedCurve width={400} voltage={inputVoltage} />
+                <VoltageCurve width={400} setVoltage={setHalfWaveInputVoltage} fullWave={false} />
+                <HalfWaveRectifiedCurve width={400} voltage={halfWaveInputVoltage} />
+            </StyledConversionDisplay>
+            <MarkdownRenderer content={FullWaveRectifiers} />
+            {fullWaveInputVoltage > 0 ? (
+                <StyledImage src={FullWaveRectifierPositive} alt="Simple rectifier circuit" width={"400px"} />
+            ) : (
+                <StyledImage src={FullWaveRectifierNegative} alt="Simple rectifier circuit" width={"400px"} />
+            )}
+            <StyledConversionDisplay>
+                <VoltageCurve width={400} setVoltage={setFullWaveInputVoltage} fullWave={true} />
+                <FullWaveRectifierCurve width={400} voltage={fullWaveInputVoltage} />
             </StyledConversionDisplay>
         </StyledContent>
     );

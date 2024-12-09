@@ -8,9 +8,10 @@ const StyledSlider = styled.div`
 interface VoltageCurveProps {
     width: number;
     setVoltage: (voltage: number) => void;
+    fullWave: boolean;
 }
 
-export function VoltageCurve({ width, setVoltage }: VoltageCurveProps) {
+export function VoltageCurve({ width, setVoltage, fullWave }: VoltageCurveProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const height = 400;
     let animationFrameId: number;
@@ -20,6 +21,7 @@ export function VoltageCurve({ width, setVoltage }: VoltageCurveProps) {
     let ACVoltageSignal = useRef(0);
     let signalWindow = useRef(Array(width).fill(0));
     let signalIndex = useRef(0);
+    let positive = useRef(true);
 
     const drawAxes = (ctx: CanvasRenderingContext2D) => {
         ctx.beginPath();
@@ -59,11 +61,29 @@ export function VoltageCurve({ width, setVoltage }: VoltageCurveProps) {
 
         for (let x = 6; x < width; x++) {
             const index = (signalIndex.current + x) % width;
-            ctx.lineTo(x, height / 2 - signalWindow.current[index]);
-        }
+            const y = height / 2 - signalWindow.current[index];
 
-        ctx.strokeStyle = "blue";
-        ctx.stroke();
+            if (fullWave) {
+                if (signalWindow.current[index] < 0 && positive.current) {
+                    positive.current = false;
+                    ctx.strokeStyle = "red";
+                    ctx.beginPath();
+                } else if (signalWindow.current[index] > 0 && !positive.current) {
+                    positive.current = true;
+                    ctx.strokeStyle = "blue";
+                    ctx.beginPath();
+                }
+                ctx.moveTo(x, height / 2 - signalWindow.current[index - 1]);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        if (!fullWave) {
+            ctx.strokeStyle = "blue";
+            ctx.stroke();
+        }
     };
 
     const animate = (time: number) => {
