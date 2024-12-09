@@ -1,10 +1,10 @@
-import React from 'react';
-import SineCurve from './ConverterPage/MovingSineComponent';
+import React from "react";
+import { ConverterPage } from "./ConverterPage/ConverterPage";
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <SineCurve />
+      <ConverterPage />
     </div>
   );
 };
