@@ -6,7 +6,8 @@ import test from "./Text/test.md";
 const StyledPage = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    justify-content: center;
 `;
 
 export function ConverterPage() {
