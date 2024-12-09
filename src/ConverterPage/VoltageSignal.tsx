@@ -1,5 +1,10 @@
 import { useRef, useEffect, useState } from "react";
+import styled from "styled-components";
 
+const StyledSlider = styled.div`
+    display: grid;
+    grid-template-columns: 150px 200px;
+`;
 interface VoltageCurveProps {
     width: number;
     setVoltage: (voltage: number) => void;
@@ -9,7 +14,7 @@ export function VoltageCurve({ width, setVoltage }: VoltageCurveProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const height = 400;
     let animationFrameId: number;
-    const [frequency, setFrequency] = useState(0.05);
+    const [frequency, setFrequency] = useState(0.3);
     const [voltageAmplitude, setVoltageAmplitude] = useState(50);
 
     let ACVoltageSignal = useRef(0);
@@ -62,7 +67,7 @@ export function VoltageCurve({ width, setVoltage }: VoltageCurveProps) {
     };
 
     const animate = (time: number) => {
-        ACVoltageSignal.current = voltageAmplitude * Math.sin(time * frequency * 0.05);
+        ACVoltageSignal.current = voltageAmplitude * Math.sin(time * frequency * 0.01);
         signalWindow.current[signalIndex.current] = ACVoltageSignal.current;
         signalIndex.current = (signalIndex.current + 1) % width;
         setVoltage(ACVoltageSignal.current);
@@ -84,32 +89,28 @@ export function VoltageCurve({ width, setVoltage }: VoltageCurveProps) {
     return (
         <div>
             <canvas ref={canvasRef} width={width} height={height} />
-            <div>
-                <label>
-                    Frequency:
-                    <input
-                        type="range"
-                        min="0.01"
-                        max="0.2"
-                        step="0.01"
-                        value={frequency}
-                        onChange={(e) => setFrequency(parseFloat(e.target.value))}
-                    />
-                </label>
-            </div>
-            <div>
-                <label>
-                    Voltage Amplitude:
-                    <input
-                        type="range"
-                        min="10"
-                        max="150"
-                        step="5"
-                        value={voltageAmplitude}
-                        onChange={(e) => setVoltageAmplitude(parseFloat(e.target.value))}
-                    />
-                </label>
-            </div>
+            <StyledSlider>
+                Frequency
+                <input
+                    type="range"
+                    min="0.1"
+                    max="1"
+                    step="0.01"
+                    value={frequency}
+                    onChange={(e) => setFrequency(parseFloat(e.target.value))}
+                />
+            </StyledSlider>
+            <StyledSlider>
+                Voltage Amplitude
+                <input
+                    type="range"
+                    min="10"
+                    max="150"
+                    step="5"
+                    value={voltageAmplitude}
+                    onChange={(e) => setVoltageAmplitude(parseFloat(e.target.value))}
+                />
+            </StyledSlider>
         </div>
     );
 }
