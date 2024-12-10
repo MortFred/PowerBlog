@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { VoltageSignal } from "../../GenerateSignal";
-import { SignalPlot } from "../../DrawSignal";
+import { VoltageSignal } from "../../../GenerateSignal";
+import { SignalPlot } from "../../../DrawSignal";
 import { useEffect, useState } from "react";
-import { MarkdownRenderer } from "../../../MarkdownRenderer";
+import { MarkdownRenderer } from "../../../../MarkdownRenderer";
 import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
 import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
 

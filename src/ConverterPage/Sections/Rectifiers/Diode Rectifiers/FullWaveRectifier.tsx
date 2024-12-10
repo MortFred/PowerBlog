@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { VoltageSignal } from "../../GenerateSignal";
-import { SignalPlot } from "../../DrawSignal";
 import { useEffect, useState } from "react";
-import { MarkdownRenderer } from "../../../MarkdownRenderer";
 import FullWaveRectifiers from "./Text/Full-wave_rectifier.md";
 import FullWaveRectifierFigure1 from "./Figures/full-wave_rectifier_1.svg";
 import FullWaveRectifierFigure2 from "./Figures/full-wave_rectifier_2.svg";
+import { MarkdownRenderer } from "../../../../MarkdownRenderer";
+import { VoltageSignal } from "../../../GenerateSignal";
+import { SignalPlot } from "../../../DrawSignal";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
@@ -40,7 +40,7 @@ export function FullWaveRectifierSection() {
     }, [rawVoltageSignal]);
 
     return (
-        <section id="fall-wave-rectifiers">
+        <section id="full-wave-rectifiers">
             <MarkdownRenderer content={FullWaveRectifiers} />
             {parseFloat(Object.keys(rawVoltageSignal)[0]) < 0 ? (
                 <StyledImage src={FullWaveRectifierFigure2} alt="Full-wave diode bridge rectifier" width={"400px"} />

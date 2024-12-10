@@ -1,6 +1,4 @@
-## Rectifier Circuits
-
-### Single-Phase Half-Wave Rectifier
+#### Single-Phase Half-Wave Rectifier
 
 The most basic rectifier circuit can be realised with a single switch, in this case a diode.
 This circuit is often called a **half-wave rectifier** circuit.
