@@ -48,12 +48,7 @@ export function FullWaveRectifierSection() {
                 <StyledImage src={FullWaveRectifierFigure1} alt="Full-wave diode bridge rectifier" width={"400px"} />
             )}
             <StyledConversionDisplay>
-                <VoltageSignal
-                    setVoltage={setRawVoltageSignal}
-                    setTime={() => {
-                        return;
-                    }}
-                />
+                <VoltageSignal setVoltage={setRawVoltageSignal} alternateColors={true} />
                 <StyledPlots>
                     <SignalPlot width={400} signal={rawVoltageSignal} />
                     <SignalPlot width={400} signal={modifiedVoltage} />

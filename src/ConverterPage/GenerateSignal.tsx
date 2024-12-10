@@ -8,10 +8,11 @@ const StyledSlider = styled.div`
 
 interface VoltageSignalProps {
     setVoltage: (voltage: Record<number, string>) => void;
-    setTime: (time: number) => void;
+    setTime?: (time: number) => void;
+    alternateColors?: boolean;
 }
 
-export function VoltageSignal({ setVoltage, setTime }: VoltageSignalProps) {
+export function VoltageSignal({ setVoltage, setTime = () => {}, alternateColors = false }: VoltageSignalProps) {
     let animationFrameId: number;
     const [frequency, setFrequency] = useState(0.3);
     const [voltageAmplitude, setVoltageAmplitude] = useState(50);
@@ -19,7 +20,10 @@ export function VoltageSignal({ setVoltage, setTime }: VoltageSignalProps) {
 
     const animate = (time: number) => {
         ACVoltageSignal.current = voltageAmplitude * Math.sin(time * frequency * 0.01);
-        let color = ACVoltageSignal.current > 0 ? "blue" : "red";
+        let color = "blue";
+        if (alternateColors) {
+            color = ACVoltageSignal.current > 0 ? "blue" : "red";
+        }
         setVoltage({ [ACVoltageSignal.current]: color });
         setTime(time);
         animationFrameId = requestAnimationFrame(animate);

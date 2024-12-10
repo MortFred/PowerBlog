@@ -117,6 +117,13 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                                 activeSection={activeSection}
                                 toggleExpanded={() => {}}
                             />
+                            <TOCLink
+                                title={"Diode Switching"}
+                                href={"#diode-switching"}
+                                level={3}
+                                activeSection={activeSection}
+                                toggleExpanded={() => {}}
+                            />
                         </>
                     )}
                 </>

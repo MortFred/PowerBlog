@@ -1,10 +1,9 @@
 import styled from "styled-components";
+import { useEffect, useState } from "react";
+import DiodeSwitchingText from "./Text/Diode_switching.md";
+import { MarkdownRenderer } from "../../../../MarkdownRenderer";
 import { VoltageSignal } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
-import { useEffect, useState } from "react";
-import { MarkdownRenderer } from "../../../../MarkdownRenderer";
-import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
-import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
@@ -20,18 +19,11 @@ const StyledPlots = styled.div`
     gap: 64px;
 `;
 
-const StyledImage = styled.img`
-    margin: 16px 16px;
-`;
-
 function modifyVoltage(voltage: number) {
-    if (voltage < 0) {
-        return 0;
-    }
-    return voltage;
+    return Math.abs(voltage);
 }
 
-export function HalfWaveRectifierSection() {
+export function DiodeSwitchingSection() {
     const [rawVoltageSignal, setRawVoltageSignal] = useState<Record<number, string>>({ 0: "black" });
     const [modifiedVoltage, setModifiedVoltage] = useState<Record<number, string>>({ 0: "black" });
 
@@ -42,11 +34,15 @@ export function HalfWaveRectifierSection() {
     }, [rawVoltageSignal]);
 
     return (
-        <section id="half-wave-rectifiers">
-            <MarkdownRenderer content={HalfWaveRectifiers} />
-            <StyledImage src={HalfWaveRectifierFigure} alt="Simple rectifier circuit" width={"400px"} />
+        <section id="diode-switching">
+            <MarkdownRenderer content={DiodeSwitchingText} />
             <StyledConversionDisplay>
-                <VoltageSignal setVoltage={setRawVoltageSignal} alternateColors={true} />
+                <VoltageSignal
+                    setVoltage={setRawVoltageSignal}
+                    setTime={() => {
+                        return;
+                    }}
+                />
                 <StyledPlots>
                     <SignalPlot width={400} signal={rawVoltageSignal} />
                     <SignalPlot width={400} signal={modifiedVoltage} />

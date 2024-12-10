@@ -10,10 +10,10 @@ export function SignalPlot({ width, signal }: SignalPlotProps) {
     const height = 400;
     let animationFrameId: number;
 
-    let signalWindow = useRef(Array<Record<number, string>>(width).fill({ 0: "black" }));
+    let signalWindow = useRef(Array<Record<number, string>>(width).fill({ 0: "blue" }));
     let signalIndex = useRef(0);
-    let latestSignalValue = useRef<Record<number, string>>({ 0: "black" });
-    let previousColor = useRef("black");
+    let latestSignalValue = useRef<Record<number, string>>({ 0: "blue" });
+    let previousColor = useRef("blue");
     useEffect(() => {
         latestSignalValue.current = signal;
     }, [signal]);
@@ -51,6 +51,7 @@ export function SignalPlot({ width, signal }: SignalPlotProps) {
     const drawSineCurve = (ctx: CanvasRenderingContext2D) => {
         let signalValue = parseFloat(signalWindow.current[signalIndex.current][0]);
         ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = "blue";
         drawAxes(ctx);
         ctx.beginPath();
         ctx.moveTo(6, height / 2 - signalValue);
