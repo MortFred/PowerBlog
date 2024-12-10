@@ -21,25 +21,45 @@ const StyledTOCLinkWithButton = styled.a<{ level: number }>`
     justify-content: start;
 `;
 
-const StyledTOCLink = styled.a<{ level: number }>`
+const StyledTOCLink = styled.a<{ level: number; isActive: boolean }>`
     display: block;
     margin-left: ${({ level }) => level * 8}px;
-    color: #07000075;
+    color: ${({ isActive }) => (isActive ? "#070000" : "#07000075")};
     text-decoration: none;
 `;
+
+const TOCLink: React.FC<{
+    title: string;
+    href: string;
+    level: number;
+    activeSection: string;
+    toggleExpanded: Dispatch<SetStateAction<boolean>>;
+}> = ({ title, href, level, activeSection, toggleExpanded }) => {
+    let isActive = "#" + activeSection === href;
+    return (
+        <StyledTOCLink level={level} href={href} onClick={() => toggleExpanded(true)} isActive={isActive}>
+            {title}
+        </StyledTOCLink>
+    );
+};
 
 const TOCLinkWithButton: React.FC<{
     title: string;
     href: string;
     level: number;
     isExpanded: boolean;
+    activeSection: string;
     toggleExpanded: Dispatch<SetStateAction<boolean>>;
-}> = ({ title, href, level, isExpanded, toggleExpanded }) => {
+}> = ({ title, href, level, isExpanded, activeSection, toggleExpanded }) => {
     return (
         <StyledTOCLinkWithButton level={0}>
-            <StyledTOCLink level={level} href={href} onClick={() => toggleExpanded(true)}>
-                {title}
-            </StyledTOCLink>
+            <TOCLink
+                title={title}
+                href={href}
+                level={level}
+                activeSection={activeSection}
+                toggleExpanded={toggleExpanded}
+            />
             <img
                 onClick={() => toggleExpanded(!isExpanded)}
                 src={arrow}
@@ -50,21 +70,26 @@ const TOCLinkWithButton: React.FC<{
     );
 };
 
-export function TableOfContents() {
+export function TableOfContents({ activeSection }: { activeSection: string }) {
     const [isRectifierCircuitsExpanded, setRectifierCircuitsExpanded] = useState(false);
     const [isDiodeRectifiersExpanded, setDiodeRectifiersExpanded] = useState(false);
 
     return (
         <StyledTOC>
-            <StyledTOCLink level={0} href="#introduction">
-                Introduction
-            </StyledTOCLink>
+            <TOCLink
+                title={"Introduction"}
+                href={"#introduction"}
+                level={0}
+                activeSection={activeSection}
+                toggleExpanded={() => {}}
+            />
             <TOCLinkWithButton
                 title="Rectifier Circuits"
                 href="#rectifier-circuits"
                 level={1}
                 isExpanded={isRectifierCircuitsExpanded}
                 toggleExpanded={setRectifierCircuitsExpanded}
+                activeSection={activeSection}
             />
             {isRectifierCircuitsExpanded && (
                 <>
@@ -74,15 +99,24 @@ export function TableOfContents() {
                         level={2}
                         isExpanded={isDiodeRectifiersExpanded}
                         toggleExpanded={setDiodeRectifiersExpanded}
+                        activeSection={activeSection}
                     />
                     {isDiodeRectifiersExpanded && (
                         <>
-                            <StyledTOCLink level={3} href="#half-wave-rectifiers">
-                                Half-Wave Rectifiers
-                            </StyledTOCLink>
-                            <StyledTOCLink level={3} href="#full-wave-rectifiers">
-                                Full-Wave Rectifiers
-                            </StyledTOCLink>
+                            <TOCLink
+                                title={"Half-Wave Rectifiers"}
+                                href={"#half-wave-rectifiers"}
+                                level={3}
+                                activeSection={activeSection}
+                                toggleExpanded={() => {}}
+                            />
+                            <TOCLink
+                                title={"Full-Wave Rectifiers"}
+                                href={"#full-wave-rectifiers"}
+                                level={3}
+                                activeSection={activeSection}
+                                toggleExpanded={() => {}}
+                            />
                         </>
                     )}
                 </>

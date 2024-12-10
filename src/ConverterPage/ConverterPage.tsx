@@ -3,10 +3,11 @@ import { MarkdownRenderer } from "../MarkdownRenderer";
 import Introduction from "./Sections/Introduction/Introduction.md";
 import { TableOfContents } from "./TableOfContents";
 import { RectifierSection } from "./Sections/Rectifiers/RectifierSection";
+import { useEffect, useState } from "react";
 
 const StyledPageLayout = styled.div`
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 250px 1fr;
     grid-template-areas: "toc content";
     padding: 32px;
     gap: 32px;
@@ -21,10 +22,33 @@ const StyledContent = styled.div`
 `;
 
 export function ConverterPage() {
+    const [activeSection, setActiveSection] = useState<string>("");
+
+    useEffect(() => {
+        const sections = document.querySelectorAll("section");
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    console.log(entry.target.id);
+                    if (entry.isIntersecting) {
+                        setActiveSection(entry.target.id);
+                    }
+                });
+            },
+            { threshold: 0, rootMargin: "0px" }
+        );
+
+        sections.forEach((section) => observer.observe(section));
+
+        return () => {
+            sections.forEach((section) => observer.unobserve(section));
+        };
+    }, []);
+
     return (
-        <StyledPageLayout>
+        <StyledPageLayout id="converter-page">
             <div></div>
-            <TableOfContents />
+            <TableOfContents activeSection={activeSection} />
             <StyledContent>
                 <section id="introduction">
                     <MarkdownRenderer content={Introduction} />
