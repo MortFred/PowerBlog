@@ -1,16 +1,18 @@
 import styled from "styled-components";
 import { MarkdownRenderer } from "../MarkdownRenderer";
-import { useState } from "react";
-import { HalfWaveRectifiedCurve } from "./HalfWaveRectifier";
+import { useEffect, useState } from "react";
 import { VoltageCurve } from "./VoltageSignal";
 
-import HalfWaveRectifier from "./Figures/half_wave_rectifier.svg";
-import FullWaveRectifierPositive from "./Figures/full-wave_rectifier_1.svg";
-import FullWaveRectifierNegative from "./Figures/full-wave_rectifier_2.svg";
+import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
+// import FullWaveRectifierPositive from "./Figures/full-wave_rectifier_1.svg";
+// import FullWaveRectifierNegative from "./Figures/full-wave_rectifier_2.svg";
 import Introduction from "./Text/Introduction.md";
-import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
-import FullWaveRectifiers from "./Text/Full-wave_rectifier.md";
-import { FullWaveRectifierCurve } from "./FullWaveRectifier";
+import HalfWaveRectifiers from "./Text/Diode Rectifiers/Half-wave_rectifier.md";
+import FullWaveRectifiers from "./Text/Diode Rectifiers/Full-wave_rectifier.md";
+import { HalfWaveRectifierPlot } from "./HalfWaveRectifier";
+// import { FullWaveRectifierCurve } from "./FullWaveRectifier";
+// import { VoltageSignal } from "./GenerateSignal";
+// import { SignalPlot } from "./DrawSignal";
 
 const StyledContent = styled.div`
     display: flex;
@@ -34,27 +36,25 @@ const StyledImage = styled.img`
 `;
 
 export function ConverterPage() {
-    const [halfWaveInputVoltage, setHalfWaveInputVoltage] = useState(0);
-    const [fullWaveInputVoltage, setFullWaveInputVoltage] = useState(0);
+    const [fullWaveInputVoltage, setFullWaveInputVoltage] = useState<Record<number, string>>({ 0: "black" });
+
     return (
         <StyledContent>
             <MarkdownRenderer content={Introduction} />
             <MarkdownRenderer content={HalfWaveRectifiers} />
-            <StyledImage src={HalfWaveRectifier} alt="Simple rectifier circuit" width={"400px"} />
-            <StyledConversionDisplay>
-                <VoltageCurve width={400} setVoltage={setHalfWaveInputVoltage} fullWave={false} />
-                <HalfWaveRectifiedCurve width={400} voltage={halfWaveInputVoltage} />
-            </StyledConversionDisplay>
+            <StyledImage src={HalfWaveRectifierFigure} alt="Simple rectifier circuit" width={"400px"} />
+            <HalfWaveRectifierPlot />
+
             <MarkdownRenderer content={FullWaveRectifiers} />
-            {fullWaveInputVoltage > 0 ? (
+            {/* {fullWaveInputVoltage > 0 ? (
                 <StyledImage src={FullWaveRectifierPositive} alt="Simple rectifier circuit" width={"400px"} />
             ) : (
                 <StyledImage src={FullWaveRectifierNegative} alt="Simple rectifier circuit" width={"400px"} />
             )}
-            <StyledConversionDisplay>
-                <VoltageCurve width={400} setVoltage={setFullWaveInputVoltage} fullWave={true} />
-                <FullWaveRectifierCurve width={400} voltage={fullWaveInputVoltage} />
-            </StyledConversionDisplay>
+            <StyledConversionDisplay> */}
+            {/* <VoltageCurve width={400} setVoltage={setFullWaveInputVoltage} fullWave={true} /> */}
+            {/* <FullWaveRectifierCurve width={400} voltage={fullWaveInputVoltage} /> */}
+            {/* </StyledConversionDisplay> */}
         </StyledContent>
     );
 }
