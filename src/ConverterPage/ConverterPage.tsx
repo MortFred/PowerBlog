@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MarkdownRenderer } from "../MarkdownRenderer";
+import MarkdownRenderer from "../MarkdownRenderer";
 import Introduction from "./Sections/Introduction/Introduction.md";
 import { TableOfContents } from "./TableOfContents";
 import { RectifierSection } from "./Sections/Rectifiers/RectifierSection";

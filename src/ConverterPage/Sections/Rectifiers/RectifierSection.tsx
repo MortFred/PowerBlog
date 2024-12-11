@@ -1,4 +1,4 @@
-import { MarkdownRenderer } from "../../../MarkdownRenderer";
+import MarkdownRenderer from "../../../MarkdownRenderer";
 import { DiodeRectifiersSection } from "./Diode Rectifiers/DiodeRectifiersSection";
 import RectifierIntro from "./Rectifier_circuits.md";
 

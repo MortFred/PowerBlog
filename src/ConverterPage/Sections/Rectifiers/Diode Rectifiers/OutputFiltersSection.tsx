@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { MarkdownRenderer } from "../../../../MarkdownRenderer";
+import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { VoltageSignal } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
 // import { Line } from "react-chartjs-2";

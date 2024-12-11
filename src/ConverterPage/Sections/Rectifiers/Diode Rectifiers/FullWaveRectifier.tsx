@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import FullWaveRectifiers from "./Text/Full-wave_rectifier.md";
 import FullWaveRectifierFigure1 from "./Figures/full-wave_rectifier_1.svg";
 import FullWaveRectifierFigure2 from "./Figures/full-wave_rectifier_2.svg";
-import { MarkdownRenderer } from "../../../../MarkdownRenderer";
 import { VoltageSignal } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
 import { useInView } from "react-intersection-observer";
+import MarkdownRenderer from "../../../../MarkdownRenderer";
 
 const StyledConversionDisplay = styled.div`
     display: flex;

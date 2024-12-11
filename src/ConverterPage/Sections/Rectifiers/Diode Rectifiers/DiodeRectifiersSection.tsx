@@ -1,4 +1,4 @@
-import { MarkdownRenderer } from "../../../../MarkdownRenderer";
+import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { FullWaveRectifierSection } from "./FullWaveRectifier";
 import { HalfWaveRectifierSection } from "./HalfWaveRectifier";
 import { OutputFiltersSection } from "./OutputFiltersSection";

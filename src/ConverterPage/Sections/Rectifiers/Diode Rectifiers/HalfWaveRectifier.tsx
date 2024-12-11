@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { VoltageSignal } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
 import { useEffect, useState } from "react";
-import { MarkdownRenderer } from "../../../../MarkdownRenderer";
 import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
 import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
 import { useInView } from "react-intersection-observer";
+import MarkdownRenderer from "../../../../MarkdownRenderer";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
