@@ -6,6 +6,7 @@ import FullWaveRectifierFigure2 from "./Figures/full-wave_rectifier_2.svg";
 import { MarkdownRenderer } from "../../../../MarkdownRenderer";
 import { VoltageSignal } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
+import { useInView } from "react-intersection-observer";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
@@ -33,6 +34,8 @@ export function FullWaveRectifierSection() {
     const [rawVoltageSignal, setRawVoltageSignal] = useState<Record<number, string>>({ 0: "black" });
     const [modifiedVoltage, setModifiedVoltage] = useState<Record<number, string>>({ 0: "black" });
 
+    const { ref } = useInView({ threshold: 0 });
+
     useEffect(() => {
         setModifiedVoltage({
             [modifyVoltage(parseFloat(Object.keys(rawVoltageSignal)[0]))]: Object.values(rawVoltageSignal)[0],
@@ -40,7 +43,7 @@ export function FullWaveRectifierSection() {
     }, [rawVoltageSignal]);
 
     return (
-        <section id="full-wave-rectifiers">
+        <section id="full-wave-rectifiers" ref={ref}>
             <MarkdownRenderer content={FullWaveRectifiers} />
             {parseFloat(Object.keys(rawVoltageSignal)[0]) < 0 ? (
                 <StyledImage src={FullWaveRectifierFigure2} alt="Full-wave diode bridge rectifier" width={"400px"} />

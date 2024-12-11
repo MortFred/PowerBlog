@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { MarkdownRenderer } from "../../../../MarkdownRenderer";
 import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
 import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
+import { useInView } from "react-intersection-observer";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
@@ -35,6 +36,8 @@ export function HalfWaveRectifierSection() {
     const [rawVoltageSignal, setRawVoltageSignal] = useState<Record<number, string>>({ 0: "black" });
     const [modifiedVoltage, setModifiedVoltage] = useState<Record<number, string>>({ 0: "black" });
 
+    const { ref } = useInView({ threshold: 0 });
+
     useEffect(() => {
         setModifiedVoltage({
             [modifyVoltage(parseFloat(Object.keys(rawVoltageSignal)[0]))]: Object.values(rawVoltageSignal)[0],
@@ -42,7 +45,7 @@ export function HalfWaveRectifierSection() {
     }, [rawVoltageSignal]);
 
     return (
-        <section id="half-wave-rectifiers">
+        <section id="half-wave-rectifiers" ref={ref}>
             <MarkdownRenderer content={HalfWaveRectifiers} />
             <StyledImage src={HalfWaveRectifierFigure} alt="Simple rectifier circuit" width={"400px"} />
             <StyledConversionDisplay>
