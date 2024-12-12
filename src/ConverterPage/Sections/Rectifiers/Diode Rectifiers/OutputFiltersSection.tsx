@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import MarkdownRenderer from "../../../../MarkdownRenderer";
-import { VoltageSignal } from "../../../GenerateSignal";
+import { SignalGenerator } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
 // import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
@@ -24,13 +24,10 @@ const StyledPlots = styled.div`
     gap: 64px;
 `;
 
-// function diodeSwitchFunction(voltage: number) {
-//     return voltage;
-// }
-
-function modifyVoltage(voltage: number) {
-    return Math.abs(voltage);
-}
+const StyledSlider = styled.div`
+    display: grid;
+    grid-template-columns: 150px 200px;
+`;
 
 // const data = {
 //     labels: [10, 15, 20],
@@ -66,18 +63,27 @@ function modifyVoltage(voltage: number) {
 // };
 
 export function OutputFiltersSection() {
-    const [rawVoltageSignal, setRawVoltageSignal] = useState<Record<number, string>>({ 0: "black" });
-    const [modifiedVoltage, setModifiedVoltage] = useState<Record<number, string>>({ 0: "black" });
+    const [frequency, setFrequency] = useState(0.003);
+    const [currentAmplitude, setCurrentAmplitude] = useState(50);
+    const [R, setR] = useState(50);
+    const [C, setC] = useState(50);
+    const [inputCurrentSignal, setInputCurrentSignal] = useState<Record<number, string>>({ 0: "black" });
+    const [outputCurrentSignal, setOutputCurrentSignal] = useState<Record<number, string>>({ 0: "black" });
 
     const { ref } = useInView({
         threshold: 0,
     });
 
-    useEffect(() => {
-        setModifiedVoltage({
-            [modifyVoltage(parseFloat(Object.keys(rawVoltageSignal)[0]))]: Object.values(rawVoltageSignal)[0],
-        });
-    }, [rawVoltageSignal]);
+    function ACCurrentSignal(time: number) {
+        return currentAmplitude * Math.sin(time * frequency);
+    }
+
+    function filterSignal(time: number) {
+        let a = 1 / (C ^ (2 * R) ^ (2 * frequency) ^ (2 + 1));
+        let b = (1 / frequency) * Math.sin(frequency * time);
+        let c = C * R * Math.cos(frequency * time);
+        return a * (b - c);
+    }
 
     return (
         <section id="output-filters" ref={ref}>
@@ -86,15 +92,57 @@ export function OutputFiltersSection() {
                 <Line data={data} options={options} />
             </div> */}
             <StyledConversionDisplay>
-                <VoltageSignal
-                    setVoltage={setRawVoltageSignal}
-                    setTime={() => {
-                        return;
-                    }}
-                />
+                <SignalGenerator setOutput={setInputCurrentSignal} signalFunction={ACCurrentSignal} />
+                <SignalGenerator setOutput={setOutputCurrentSignal} signalFunction={filterSignal} />
+                <div>
+                    <StyledSlider>
+                        Frequency
+                        <input
+                            type="range"
+                            min="0.0001"
+                            max="0.01"
+                            step="0.0001"
+                            value={frequency}
+                            onChange={(e) => setFrequency(parseFloat(e.target.value))}
+                        />
+                    </StyledSlider>
+                    <StyledSlider>
+                        Current Amplitude
+                        <input
+                            type="range"
+                            min="10"
+                            max="150"
+                            step="5"
+                            value={currentAmplitude}
+                            onChange={(e) => setCurrentAmplitude(parseFloat(e.target.value))}
+                        />
+                    </StyledSlider>
+                    <StyledSlider>
+                        Load Resistance R
+                        <input
+                            type="range"
+                            min="10"
+                            max="150"
+                            step="5"
+                            value={R}
+                            onChange={(e) => setR(parseFloat(e.target.value))}
+                        />
+                    </StyledSlider>
+                    <StyledSlider>
+                        Filter Capacitance C
+                        <input
+                            type="range"
+                            min="10"
+                            max="150"
+                            step="5"
+                            value={C}
+                            onChange={(e) => setC(parseFloat(e.target.value))}
+                        />
+                    </StyledSlider>
+                </div>
                 <StyledPlots>
-                    <SignalPlot width={400} signal={rawVoltageSignal} />
-                    <SignalPlot width={400} signal={modifiedVoltage} />
+                    <SignalPlot width={400} signal={inputCurrentSignal} />
+                    <SignalPlot width={400} signal={outputCurrentSignal} />
                 </StyledPlots>
             </StyledConversionDisplay>
         </section>
