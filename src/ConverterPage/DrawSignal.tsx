@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 
 interface SignalPlotProps {
     width: number;
-    signal: Record<number, string>;
+    signal: [number, string];
 }
 
 export function SignalPlot({ width, signal }: SignalPlotProps) {
@@ -10,15 +10,17 @@ export function SignalPlot({ width, signal }: SignalPlotProps) {
     const height = 400;
     let animationFrameId: number;
 
-    let signalWindow = useRef(Array<Record<number, string>>(width).fill({ 0: "blue" }));
+    let signalWindow = useRef(Array<[number, string]>(width).fill([0, "blue"]));
     let signalIndex = useRef(0);
-    let latestSignalValue = useRef<Record<number, string>>({ 0: "blue" });
+    let latestSignalValue = useRef<[number, string]>([0, "blue"]);
     let previousColor = useRef("blue");
     useEffect(() => {
         latestSignalValue.current = signal;
     }, [signal]);
 
     const drawAxes = (ctx: CanvasRenderingContext2D) => {
+        ctx.save();
+
         ctx.beginPath();
         // x-axis
         ctx.moveTo(6, height / 2);
@@ -40,7 +42,6 @@ export function SignalPlot({ width, signal }: SignalPlotProps) {
         ctx.stroke();
 
         // y-axis label
-        ctx.save();
         ctx.translate(20, 20);
         ctx.font = "16px Arial";
         ctx.fillStyle = "black";
@@ -49,17 +50,19 @@ export function SignalPlot({ width, signal }: SignalPlotProps) {
     };
 
     const drawSineCurve = (ctx: CanvasRenderingContext2D) => {
-        let signalValue = parseFloat(signalWindow.current[signalIndex.current][0]);
+        let signalValue = signalWindow.current[signalIndex.current][0];
+        let signalColor = signalWindow.current[signalIndex.current][1];
+
         ctx.clearRect(0, 0, width, height);
-        ctx.strokeStyle = "blue";
         drawAxes(ctx);
+        ctx.strokeStyle = signalColor;
         ctx.beginPath();
         ctx.moveTo(6, height / 2 - signalValue);
 
         for (let x = 6; x < width; x++) {
             const index = (signalIndex.current + x) % width;
-            let signalValue = parseFloat(Object.keys(signalWindow.current[index])[0]);
-            let signalColor = Object.values(signalWindow.current[index])[0];
+            let signalValue = signalWindow.current[index][0] * (height / 2 - 50);
+            let signalColor = signalWindow.current[index][1];
 
             ctx.lineTo(x, height / 2 - signalValue);
             if (previousColor.current !== signalColor) {

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { SignalGenerator } from "../../../GenerateSignal";
 import { SignalPlot } from "../../../DrawSignal";
@@ -64,11 +64,11 @@ const StyledSlider = styled.div`
 
 export function OutputFiltersSection() {
     const [frequency, setFrequency] = useState(0.003);
-    const [currentAmplitude, setCurrentAmplitude] = useState(50);
-    const [R, setR] = useState(50);
-    const [C, setC] = useState(50);
-    const [inputCurrentSignal, setInputCurrentSignal] = useState<Record<number, string>>({ 0: "black" });
-    const [outputCurrentSignal, setOutputCurrentSignal] = useState<Record<number, string>>({ 0: "black" });
+    const [currentAmplitude, setCurrentAmplitude] = useState(0.5);
+    const [R, setR] = useState(0.4);
+    const [C, setC] = useState(0.4);
+    const [inputCurrentSignal, setInputCurrentSignal] = useState<[number, string]>([0, "black"]);
+    const [outputCurrentSignal, setOutputCurrentSignal] = useState<[number, string]>([0, "black"]);
 
     const { ref } = useInView({
         threshold: 0,
@@ -110,9 +110,9 @@ export function OutputFiltersSection() {
                         Current Amplitude
                         <input
                             type="range"
-                            min="10"
-                            max="150"
-                            step="5"
+                            min="0.05"
+                            max="1"
+                            step="0.01"
                             value={currentAmplitude}
                             onChange={(e) => setCurrentAmplitude(parseFloat(e.target.value))}
                         />
@@ -121,9 +121,9 @@ export function OutputFiltersSection() {
                         Load Resistance R
                         <input
                             type="range"
-                            min="10"
-                            max="150"
-                            step="5"
+                            min="0.05"
+                            max="1"
+                            step="0.01"
                             value={R}
                             onChange={(e) => setR(parseFloat(e.target.value))}
                         />
@@ -132,9 +132,9 @@ export function OutputFiltersSection() {
                         Filter Capacitance C
                         <input
                             type="range"
-                            min="10"
-                            max="150"
-                            step="5"
+                            min="0.05"
+                            max="1"
+                            step="0.01"
                             value={C}
                             onChange={(e) => setC(parseFloat(e.target.value))}
                         />
@@ -142,7 +142,7 @@ export function OutputFiltersSection() {
                 </div>
                 <StyledPlots>
                     <SignalPlot width={400} signal={inputCurrentSignal} />
-                    <SignalPlot width={400} signal={outputCurrentSignal} />
+                    {/* <SignalPlot width={400} signal={outputCurrentSignal} /> */}
                 </StyledPlots>
             </StyledConversionDisplay>
         </section>

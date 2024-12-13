@@ -39,9 +39,9 @@ function modifyVoltage(voltage: number) {
 
 export function HalfWaveRectifierSection() {
     const [frequency, setFrequency] = useState(0.3);
-    const [voltageAmplitude, setVoltageAmplitude] = useState(50);
-    const [rawVoltageSignal, setRawVoltageSignal] = useState<Record<number, string>>({ 0: "black" });
-    const [modifiedVoltage, setModifiedVoltage] = useState<Record<number, string>>({ 0: "black" });
+    const [voltageAmplitude, setVoltageAmplitude] = useState(0.5);
+    const [rawVoltageSignal, setRawVoltageSignal] = useState<[number, string]>([0, "black"]);
+    const [modifiedVoltage, setModifiedVoltage] = useState<[number, string]>([0, "black"]);
     const { ref } = useInView({ threshold: 0 });
 
     function ACVoltageSignal(time: number) {
@@ -49,9 +49,7 @@ export function HalfWaveRectifierSection() {
     }
 
     useEffect(() => {
-        setModifiedVoltage({
-            [modifyVoltage(parseFloat(Object.keys(rawVoltageSignal)[0]))]: Object.values(rawVoltageSignal)[0],
-        });
+        setModifiedVoltage([modifyVoltage(rawVoltageSignal[0]), rawVoltageSignal[1]]);
     }, [rawVoltageSignal]);
 
     return (
@@ -80,9 +78,9 @@ export function HalfWaveRectifierSection() {
                         Voltage Amplitude
                         <input
                             type="range"
-                            min="10"
-                            max="150"
-                            step="5"
+                            min="0.05"
+                            max="1"
+                            step="0.01"
                             value={voltageAmplitude}
                             onChange={(e) => setVoltageAmplitude(parseFloat(e.target.value))}
                         />

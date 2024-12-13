@@ -42,24 +42,26 @@ const drawArrow = (
         arrowLength = Math.abs(arrowLength);
         angle += Math.PI;
     }
-    let endX = centerX + (arrowLength - headLength + 4) * Math.cos(angle);
-    let endY = centerY + (arrowLength - headLength + 4) * Math.sin(angle);
+    // let endX = centerX + Math.max(arrowLength, headLength) * Math.cos(angle);
+    // let endY = centerY + Math.max(arrowLength, headLength) * Math.sin(angle);
+    let endX = centerX + arrowLength * Math.cos(angle);
+    let endY = centerY + arrowLength * Math.sin(angle);
 
     ctx.lineWidth = lineWidth;
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.lineTo(endX, endY);
+    ctx.lineTo(endX - 4 * Math.cos(angle), endY - 4 * Math.sin(angle));
     ctx.stroke();
-
     // Draw arrowhead
-    endX = centerX + arrowLength * Math.cos(angle);
-    endY = centerY + arrowLength * Math.sin(angle);
     ctx.beginPath();
     ctx.moveTo(endX, endY);
     ctx.lineTo(endX - headLength * Math.cos(angle - headAngle), endY - headLength * Math.sin(angle - headAngle));
     ctx.lineTo(endX - headLength * Math.cos(angle + headAngle), endY - headLength * Math.sin(angle + headAngle));
-    ctx.lineTo(endX, endY);
+    ctx.closePath();
     ctx.fill();
+
+    ctx.restore();
     ctx.lineWidth = 1;
 };
 
@@ -87,30 +89,29 @@ const drawReferenceFrame = (canvasRef: React.RefObject<HTMLCanvasElement>, radiu
 };
 
 interface ReferenceFrameProps {
-    voltageSignal: Record<number, string>;
+    voltageSignal: [number, string];
 }
 
-const ABCReferenceCanvas: React.FC<ReferenceFrameProps> = ({ voltageSignal } = { voltageSignal: { 0: "black" } }) => {
+const ABCReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignal } = { voltageSignal: [0, "black"] }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     let animationFrameId: number;
     const radius = 130;
-    let latestSignalValue = useRef<Record<number, string>>({ 0: "blue" });
+    let latestSignalValue = useRef<[number, string]>([0, "blue"]);
 
     useEffect(() => {
         latestSignalValue.current = voltageSignal;
     }, [voltageSignal]);
 
     const animate = () => {
-        let signalValue = parseFloat(Object.keys(latestSignalValue.current)[0]);
-        let signalColor = Object.values(latestSignalValue.current)[0];
-        // console.log(signalValue, signalColor);
+        let signalValue = latestSignalValue.current[0] * radius;
+        let signalColor = latestSignalValue.current[1];
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
             if (ctx) {
                 drawCircle(canvasRef, radius);
                 drawReferenceFrame(canvasRef, radius);
-                ctx.strokeStyle = "#00FF00";
-                ctx.fillStyle = "#00FF00";
+                ctx.strokeStyle = signalColor;
+                ctx.fillStyle = signalColor;
                 drawArrow(canvasRef, 0, signalValue, 5);
                 ctx;
             }
@@ -126,4 +127,4 @@ const ABCReferenceCanvas: React.FC<ReferenceFrameProps> = ({ voltageSignal } = {
     return <canvas ref={canvasRef} width={400} height={400} />;
 };
 
-export default ABCReferenceCanvas;
+export default ABCReferenceCircle;
