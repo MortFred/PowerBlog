@@ -3,7 +3,7 @@ import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { SignalGenerator } from "../../../GenerateSignal";
 import ABCReferenceCircle from "./ABCReferenceCircle";
 import ABCReferenceFrameText from "./ABC_reference_frame.md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignalPlot } from "../../../DrawSignal";
 
 const StyledSlider = styled.div`
@@ -21,6 +21,7 @@ export function ABCReferenceFrameSection() {
     const [rawVoltageSignalPhaseA, setRawVoltageSignalPhaseA] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseB, setRawVoltageSignalPhaseB] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseC, setRawVoltageSignalPhaseC] = useState<[number, string]>([0, "black"]);
+    const [combinedVoltageSignal, setCombinedVoltageSignal] = useState<[number, string]>([0, "black"]);
     const [frequency, setFrequency] = useState(0.1);
     const [voltageAmplitude, setVoltageAmplitude] = useState(0.7);
     function ACVoltageSignalPhaseA(time: number) {
@@ -32,6 +33,14 @@ export function ABCReferenceFrameSection() {
     function ACVoltageSignalPhaseC(time: number) {
         return voltageAmplitude * Math.sin(time * frequency * 0.01 + (Math.PI * 4) / 3);
     }
+
+    useEffect(() => {
+        setCombinedVoltageSignal([
+            Math.sqrt(rawVoltageSignalPhaseA[0] ** 2 + rawVoltageSignalPhaseB[0] ** 2 + rawVoltageSignalPhaseC[0] ** 2),
+            "#06eaff",
+        ]);
+    }, [rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]);
+
     return (
         <section id="abc-reference">
             <MarkdownRenderer content={ABCReferenceFrameText} />

@@ -4,6 +4,14 @@ const getCenter = (canvas: HTMLCanvasElement) => {
     return [canvas.width / 2, canvas.height / 2];
 };
 
+const sumVectors = (v1: [number, number], v2: [number, number]): [number, number] => {
+    let x = v1[0] * Math.cos(v1[1]) + v2[0] * Math.cos(v2[1]);
+    let y = v1[0] * Math.sin(v1[1]) + v2[0] * Math.sin(v2[1]);
+    let r = Math.sqrt(x * x + y * y);
+    let theta = Math.atan2(y, x);
+    return [r, theta];
+};
+
 const drawCircle = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: number = 60) => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -42,8 +50,7 @@ const drawArrow = (
         arrowLength = Math.abs(arrowLength);
         angle += Math.PI;
     }
-    // let endX = centerX + Math.max(arrowLength, headLength) * Math.cos(angle);
-    // let endY = centerY + Math.max(arrowLength, headLength) * Math.sin(angle);
+
     let endX = centerX + arrowLength * Math.cos(angle);
     let endY = centerY + arrowLength * Math.sin(angle);
 
@@ -96,6 +103,7 @@ const ABCReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignals }: R
     const canvasRef = useRef<HTMLCanvasElement>(null);
     let animationFrameId: number;
     const radius = 130;
+    const arrowWidth = 3;
     let latestSignalValues = useRef(voltageSignals.map(() => [0, "blue"] as [number, string]));
 
     useEffect(() => {
@@ -106,6 +114,7 @@ const ABCReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignals }: R
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
             if (ctx) {
+                let combinedSignalValue: [number, number] = [0, 0];
                 drawCircle(canvasRef, radius);
                 drawReferenceFrame(canvasRef, radius);
                 latestSignalValues.current.map((signal, index) => {
@@ -113,8 +122,12 @@ const ABCReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignals }: R
                     let signalColor = signal[1];
                     ctx.strokeStyle = signalColor;
                     ctx.fillStyle = signalColor;
-                    drawArrow(canvasRef, index * ((Math.PI * 2) / 3), signalValue, 5);
+                    drawArrow(canvasRef, index * ((Math.PI * 2) / 3), signalValue, arrowWidth);
+                    combinedSignalValue = sumVectors(combinedSignalValue, [signalValue, index * ((Math.PI * 2) / 3)]);
                 });
+                ctx.strokeStyle = "#06eaff";
+                ctx.fillStyle = "#06eaff";
+                drawArrow(canvasRef, combinedSignalValue[1], combinedSignalValue[0], arrowWidth);
             }
         }
         animationFrameId = requestAnimationFrame(animate);
