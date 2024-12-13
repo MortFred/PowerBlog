@@ -4,6 +4,7 @@ import Introduction from "./Sections/Introduction/Introduction.md";
 import { TableOfContents } from "./TableOfContents";
 import { RectifierSection } from "./Sections/Rectifiers/RectifierSection";
 import { useEffect, useState } from "react";
+import { ReferenceFrameSection } from "./Sections/Reference Frames/ReferenceFrames";
 
 const StyledPageLayout = styled.div`
     display: grid;
@@ -53,6 +54,7 @@ export function ConverterPage() {
                     <MarkdownRenderer content={Introduction} />
                 </section>
                 <RectifierSection />
+                <ReferenceFrameSection />
             </StyledContent>
         </StyledPageLayout>
     );
