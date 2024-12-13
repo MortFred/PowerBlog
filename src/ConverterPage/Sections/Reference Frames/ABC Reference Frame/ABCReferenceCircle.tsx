@@ -89,31 +89,32 @@ const drawReferenceFrame = (canvasRef: React.RefObject<HTMLCanvasElement>, radiu
 };
 
 interface ReferenceFrameProps {
-    voltageSignal: [number, string];
+    voltageSignals: Array<[number, string]>;
 }
 
-const ABCReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignal } = { voltageSignal: [0, "black"] }) => {
+const ABCReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignals }: ReferenceFrameProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     let animationFrameId: number;
     const radius = 130;
-    let latestSignalValue = useRef<[number, string]>([0, "blue"]);
+    let latestSignalValues = useRef(voltageSignals.map(() => [0, "blue"] as [number, string]));
 
     useEffect(() => {
-        latestSignalValue.current = voltageSignal;
-    }, [voltageSignal]);
+        latestSignalValues.current = voltageSignals;
+    }, [voltageSignals]);
 
     const animate = () => {
-        let signalValue = latestSignalValue.current[0] * radius;
-        let signalColor = latestSignalValue.current[1];
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
             if (ctx) {
                 drawCircle(canvasRef, radius);
                 drawReferenceFrame(canvasRef, radius);
-                ctx.strokeStyle = signalColor;
-                ctx.fillStyle = signalColor;
-                drawArrow(canvasRef, 0, signalValue, 5);
-                ctx;
+                latestSignalValues.current.map((signal, index) => {
+                    let signalValue = signal[0] * radius;
+                    let signalColor = signal[1];
+                    ctx.strokeStyle = signalColor;
+                    ctx.fillStyle = signalColor;
+                    drawArrow(canvasRef, index * ((Math.PI * 2) / 3), signalValue, 5);
+                });
             }
         }
         animationFrameId = requestAnimationFrame(animate);

@@ -2,21 +2,24 @@ import { useRef, useEffect } from "react";
 
 interface SignalPlotProps {
     width: number;
-    signal: [number, string];
+    signals: Array<[number, string]>;
 }
 
-export function SignalPlot({ width, signal }: SignalPlotProps) {
+export function SignalPlot({ width, signals }: SignalPlotProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const height = 400;
     let animationFrameId: number;
 
-    let signalWindow = useRef(Array<[number, string]>(width).fill([0, "blue"]));
+    let signalWindows = useRef(
+        Array.from({ length: signals.length }, () => useRef(Array<[number, string]>(width).fill([0, "blue"])))
+    );
     let signalIndex = useRef(0);
-    let latestSignalValue = useRef<[number, string]>([0, "blue"]);
     let previousColor = useRef("blue");
     useEffect(() => {
-        latestSignalValue.current = signal;
-    }, [signal]);
+        signalWindows.current.map((window, index) => {
+            window.current[signalIndex.current] = signals[index];
+        });
+    }, [signals]);
 
     const drawAxes = (ctx: CanvasRenderingContext2D) => {
         ctx.save();
@@ -49,41 +52,45 @@ export function SignalPlot({ width, signal }: SignalPlotProps) {
         ctx.restore();
     };
 
-    const drawSineCurve = (ctx: CanvasRenderingContext2D) => {
-        let signalValue = signalWindow.current[signalIndex.current][0];
-        let signalColor = signalWindow.current[signalIndex.current][1];
-
+    const drawSineCurve = (ctx: CanvasRenderingContext2D, signalWindows: Array<Array<[number, string]>>) => {
         ctx.clearRect(0, 0, width, height);
         drawAxes(ctx);
-        ctx.strokeStyle = signalColor;
-        ctx.beginPath();
-        ctx.moveTo(6, height / 2 - signalValue);
+        signalWindows.map((signalWindow) => {
+            let signalValue = signalWindow[signalIndex.current][0];
+            let signalColor = signalWindow[signalIndex.current][1];
 
-        for (let x = 6; x < width; x++) {
-            const index = (signalIndex.current + x) % width;
-            let signalValue = signalWindow.current[index][0] * (height / 2 - 50);
-            let signalColor = signalWindow.current[index][1];
+            ctx.strokeStyle = signalColor;
+            ctx.beginPath();
+            ctx.moveTo(6, height / 2 - signalValue);
 
-            ctx.lineTo(x, height / 2 - signalValue);
-            if (previousColor.current !== signalColor) {
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(x, height / 2 - signalValue);
-                ctx.strokeStyle = signalColor;
-                previousColor.current = signalColor;
+            for (let x = 6; x < width; x++) {
+                const index = (signalIndex.current + x) % width;
+                let signalValue = signalWindow[index][0] * (height / 2 - 50);
+                let signalColor = signalWindow[index][1];
+
+                ctx.lineTo(x, height / 2 - signalValue);
+                if (previousColor.current !== signalColor) {
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(x, height / 2 - signalValue);
+                    ctx.strokeStyle = signalColor;
+                    previousColor.current = signalColor;
+                }
             }
-        }
-        ctx.stroke();
+            ctx.stroke();
+        });
     };
 
     const animate = () => {
-        signalWindow.current[signalIndex.current] = latestSignalValue.current;
         signalIndex.current = (signalIndex.current + 1) % width;
 
         if (canvasRef.current) {
             const ctx = canvasRef.current.getContext("2d");
             if (ctx) {
-                drawSineCurve(ctx);
+                drawSineCurve(
+                    ctx,
+                    signalWindows.current.map((window) => window.current)
+                );
             }
         }
         animationFrameId = requestAnimationFrame(animate);

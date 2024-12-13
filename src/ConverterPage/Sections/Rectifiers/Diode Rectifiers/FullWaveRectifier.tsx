@@ -90,8 +90,8 @@ export function FullWaveRectifierSection() {
                     </StyledSlider>
                 </div>
                 <StyledPlots>
-                    <SignalPlot width={400} signal={rawVoltageSignal} />
-                    <SignalPlot width={400} signal={modifiedVoltage} />
+                    <SignalPlot width={400} signals={[rawVoltageSignal]} />
+                    <SignalPlot width={400} signals={[modifiedVoltage]} />
                 </StyledPlots>
             </StyledConversionDisplay>
         </section>
