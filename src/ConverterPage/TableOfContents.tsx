@@ -72,6 +72,7 @@ const TOCLinkWithButton: React.FC<{
 
 export function TableOfContents({ activeSection }: { activeSection: string }) {
     const [isRectifierCircuitsExpanded, setRectifierCircuitsExpanded] = useState(false);
+    const [isReferenceFramesExpanded, setReferenceFramesExpanded] = useState(false);
     const [isDiodeRectifiersExpanded, setDiodeRectifiersExpanded] = useState(false);
 
     return (
@@ -126,6 +127,25 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                             />
                         </>
                     )}
+                </>
+            )}
+            <TOCLinkWithButton
+                title="Reference Frames"
+                href="#reference-frames"
+                level={1}
+                isExpanded={isReferenceFramesExpanded}
+                toggleExpanded={setReferenceFramesExpanded}
+                activeSection={activeSection}
+            />
+            {isReferenceFramesExpanded && (
+                <>
+                    <TOCLink
+                        title={"ABC Reference Frame"}
+                        href={"#abc-reference"}
+                        level={2}
+                        activeSection={activeSection}
+                        toggleExpanded={() => {}}
+                    />
                 </>
             )}
         </StyledTOC>
