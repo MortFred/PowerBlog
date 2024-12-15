@@ -3,9 +3,10 @@ import { useRef, useEffect } from "react";
 interface SignalPlotProps {
     width: number;
     signals: Array<[number, string]>;
+    isPaused: boolean;
 }
 
-export function SignalPlot({ width, signals }: SignalPlotProps) {
+export function SignalPlot({ width, signals, isPaused }: SignalPlotProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const height = 400;
     let animationFrameId: number;
@@ -15,11 +16,17 @@ export function SignalPlot({ width, signals }: SignalPlotProps) {
     );
     let signalIndex = useRef(0);
     let previousColor = useRef("blue");
+    const isPausedRef = useRef(isPaused);
+
     useEffect(() => {
         signalWindows.current.map((window, index) => {
             window.current[signalIndex.current] = signals[index];
         });
     }, [signals]);
+
+    useEffect(() => {
+        isPausedRef.current = isPaused;
+    }, [isPaused]);
 
     const drawAxes = (ctx: CanvasRenderingContext2D) => {
         ctx.save();
@@ -82,6 +89,9 @@ export function SignalPlot({ width, signals }: SignalPlotProps) {
     };
 
     const animate = () => {
+        if (isPausedRef.current) {
+            return;
+        }
         signalIndex.current = (signalIndex.current + 1) % width;
 
         if (canvasRef.current) {
@@ -99,7 +109,7 @@ export function SignalPlot({ width, signals }: SignalPlotProps) {
     useEffect(() => {
         animationFrameId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(animationFrameId);
-    }, []);
+    }, [isPaused]);
 
     return (
         <div>

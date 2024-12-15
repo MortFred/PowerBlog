@@ -141,8 +141,8 @@ export function OutputFiltersSection() {
                     </StyledSlider>
                 </div>
                 <StyledPlots>
-                    <SignalPlot width={400} signals={[inputCurrentSignal]} />
-                    {/* <SignalPlot width={400} signal={outputCurrentSignal} /> */}
+                    <SignalPlot isPaused={isPaused} width={400} signals={[inputCurrentSignal]} />
+                    {/* <SignalPlot isPaused={isPaused} width={400} signal={outputCurrentSignal} /> */}
                 </StyledPlots>
             </StyledConversionDisplay>
         </section>

@@ -18,8 +18,10 @@ export function ABCReferenceFrameSection() {
     const [rawVoltageSignalPhaseB, setRawVoltageSignalPhaseB] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseC, setRawVoltageSignalPhaseC] = useState<[number, string]>([0, "black"]);
     const [combinedVoltageSignal, setCombinedVoltageSignal] = useState<[number, string]>([0, "black"]);
+    const [isPaused, setIsPaused] = useState(false);
     const [frequency, setFrequency] = useState(0.1);
     const [voltageAmplitude, setVoltageAmplitude] = useState(0.7);
+
     function ACVoltageSignalPhaseA(time: number) {
         return voltageAmplitude * Math.sin(time * frequency * 0.01);
     }
@@ -45,30 +47,35 @@ export function ABCReferenceFrameSection() {
                 alternateColors={false}
                 signalFunction={ACVoltageSignalPhaseA}
                 signalColor="#FF0000"
+                isPaused={isPaused}
             />
             <SignalGenerator
                 setOutput={setRawVoltageSignalPhaseB}
                 alternateColors={false}
                 signalFunction={ACVoltageSignalPhaseB}
                 signalColor="#00FF00"
+                isPaused={isPaused}
             />
             <SignalGenerator
                 setOutput={setRawVoltageSignalPhaseC}
                 alternateColors={false}
                 signalFunction={ACVoltageSignalPhaseC}
                 signalColor="#0000FF"
+                isPaused={isPaused}
             />
             <InputSliders
                 sliders={[
                     { name: "Frequency", value: frequency, setValue: setFrequency },
                     { name: "Voltage Amplitude", value: voltageAmplitude, setValue: setVoltageAmplitude },
                 ]}
+                pauseAnimation={setIsPaused}
             />
             <StyledPlots>
                 <ABCReferenceCircle
                     voltageSignals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}
                 />
                 <SignalPlot
+                    isPaused={isPaused}
                     signals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}
                     width={400}
                 />

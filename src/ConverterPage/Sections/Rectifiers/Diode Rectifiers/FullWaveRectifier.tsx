@@ -36,6 +36,7 @@ export function FullWaveRectifierSection() {
     const [voltageAmplitude, setVoltageAmplitude] = useState(0.5);
     const [rawVoltageSignal, setRawVoltageSignal] = useState<[number, string]>([0, "black"]);
     const [modifiedVoltage, setModifiedVoltage] = useState<[number, string]>([0, "black"]);
+    const [isPaused, setIsPaused] = useState(false);
 
     const { ref } = useInView({ threshold: 0 });
 
@@ -60,16 +61,18 @@ export function FullWaveRectifierSection() {
                     setOutput={setRawVoltageSignal}
                     alternateColors={true}
                     signalFunction={ACVoltageSignal}
+                    isPaused={isPaused}
                 />
                 <InputSliders
                     sliders={[
                         { name: "Frequency", value: frequency, setValue: setFrequency },
                         { name: "Voltage Amplitude", value: voltageAmplitude, setValue: setVoltageAmplitude },
                     ]}
+                    pauseAnimation={setIsPaused}
                 />
                 <StyledPlots>
-                    <SignalPlot width={400} signals={[rawVoltageSignal]} />
-                    <SignalPlot width={400} signals={[modifiedVoltage]} />
+                    <SignalPlot isPaused={isPaused} width={400} signals={[rawVoltageSignal]} />
+                    <SignalPlot isPaused={isPaused} width={400} signals={[modifiedVoltage]} />
                 </StyledPlots>
             </StyledConversionDisplay>
         </section>

@@ -10,7 +10,7 @@ export function DiodeRectifiersSection() {
             <MarkdownRenderer content={DiodeRectifiersInfo} />
             <HalfWaveRectifierSection />
             <FullWaveRectifierSection />
-            <OutputFiltersSection />
+            {/* <OutputFiltersSection /> */}
         </section>
     );
 }

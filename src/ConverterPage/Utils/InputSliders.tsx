@@ -1,4 +1,12 @@
+import { useState } from "react";
 import styled from "styled-components";
+import { FiPlayCircle, FiPauseCircle } from "react-icons/fi";
+
+const StyledInputView = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+`;
 
 const StyledSlider = styled.div`
     display: grid;
@@ -7,9 +15,16 @@ const StyledSlider = styled.div`
 
 interface InputSliderProps {
     sliders: { name: string; value: number; setValue: (value: number) => void }[];
+    pauseAnimation: (value: boolean) => void;
 }
 
-export default function InputSliders({ sliders }: InputSliderProps) {
+export default function InputSliders({ sliders, pauseAnimation }: InputSliderProps) {
+    const [isPaused, setIsPaused] = useState(false);
+
+    const togglePause = () => {
+        setIsPaused(!isPaused);
+        pauseAnimation(!isPaused);
+    };
     const sliderElements = sliders.map((slider) => (
         <StyledSlider key={slider.name}>
             {slider.name}
@@ -23,5 +38,14 @@ export default function InputSliders({ sliders }: InputSliderProps) {
             />
         </StyledSlider>
     ));
-    return <div>{sliderElements}</div>;
+    return (
+        <StyledInputView>
+            <div>{sliderElements}</div>
+            {isPaused ? (
+                <FiPlayCircle size={48} strokeWidth={1} onClick={togglePause} />
+            ) : (
+                <FiPauseCircle size={48} strokeWidth={1} onClick={togglePause} />
+            )}
+        </StyledInputView>
+    );
 }

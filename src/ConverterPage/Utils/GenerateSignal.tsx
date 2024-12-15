@@ -1,8 +1,9 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 interface SignalProps {
     setOutput: (output: [number, string]) => void;
     signalFunction: (time: number) => number;
+    isPaused: boolean;
     setTime?: (time: number) => void;
     alternateColors?: boolean;
     signalColor?: string;
@@ -14,13 +15,17 @@ export function SignalGenerator({
     setTime = () => {},
     alternateColors = false,
     signalColor = "blue",
+    isPaused = false,
 }: SignalProps) {
     let animationFrameId: number;
     const SignalValue = useRef(0);
 
     const animate = (time: number) => {
-        SignalValue.current = signalFunction(time);
         let color = signalColor;
+        if (isPaused) {
+            return;
+        }
+        SignalValue.current = signalFunction(time);
         if (alternateColors) {
             color = SignalValue.current > 0 ? "blue" : "red";
         }
@@ -31,8 +36,9 @@ export function SignalGenerator({
 
     useEffect(() => {
         animationFrameId = requestAnimationFrame(animate);
+        console.log(isPaused);
         return () => cancelAnimationFrame(animationFrameId);
-    }, [signalFunction]);
+    }, [signalFunction, isPaused]);
 
     return <></>;
 }
