@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import MarkdownRenderer from "../../../../MarkdownRenderer";
-import { SignalGenerator } from "../../../GenerateSignal";
+import { SignalGenerator } from "../../../Utils/GenerateSignal";
 import ABCReferenceCircle from "./ABCReferenceCircle";
 import ABCReferenceFrameText from "./ABC_reference_frame.md";
 import { useEffect, useState } from "react";
-import { SignalPlot } from "../../../DrawSignal";
-import InputSliders from "../../../InputSliders";
+import { SignalPlot } from "../../../Utils/DrawSignal";
+import InputSliders from "../../../Utils/InputSliders";
 
 const StyledPlots = styled.div`
     display: flex;

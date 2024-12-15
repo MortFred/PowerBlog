@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import MarkdownRenderer from "../../../../MarkdownRenderer";
-import { SignalGenerator } from "../../../GenerateSignal";
-import { SignalPlot } from "../../../DrawSignal";
+import { SignalGenerator } from "../../../Utils/GenerateSignal";
+import { SignalPlot } from "../../../Utils/DrawSignal";
 // import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import FilterText from "./Text/Output_filters.md";

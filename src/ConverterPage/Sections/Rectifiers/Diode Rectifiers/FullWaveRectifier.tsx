@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import FullWaveRectifiers from "./Text/Full-wave_rectifier.md";
 import FullWaveRectifierFigure1 from "./Figures/full-wave_rectifier_1.svg";
 import FullWaveRectifierFigure2 from "./Figures/full-wave_rectifier_2.svg";
-import { SignalGenerator } from "../../../GenerateSignal";
-import { SignalPlot } from "../../../DrawSignal";
+import { SignalGenerator } from "../../../Utils/GenerateSignal";
+import { SignalPlot } from "../../../Utils/DrawSignal";
 import { useInView } from "react-intersection-observer";
 import MarkdownRenderer from "../../../../MarkdownRenderer";
-import InputSliders from "../../../InputSliders";
+import InputSliders from "../../../Utils/InputSliders";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
