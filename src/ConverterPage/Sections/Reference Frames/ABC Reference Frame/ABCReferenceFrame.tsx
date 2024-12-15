@@ -5,11 +5,7 @@ import ABCReferenceCircle from "./ABCReferenceCircle";
 import ABCReferenceFrameText from "./ABC_reference_frame.md";
 import { useEffect, useState } from "react";
 import { SignalPlot } from "../../../DrawSignal";
-
-const StyledSlider = styled.div`
-    display: grid;
-    grid-template-columns: 150px 200px;
-`;
+import InputSliders from "../../../InputSliders";
 
 const StyledPlots = styled.div`
     display: flex;
@@ -62,30 +58,12 @@ export function ABCReferenceFrameSection() {
                 signalFunction={ACVoltageSignalPhaseC}
                 signalColor="#0000FF"
             />
-            <div>
-                <StyledSlider>
-                    Frequency
-                    <input
-                        type="range"
-                        min="0.05"
-                        max="0.5"
-                        step="0.01"
-                        value={frequency}
-                        onChange={(e) => setFrequency(parseFloat(e.target.value))}
-                    />
-                </StyledSlider>
-                <StyledSlider>
-                    Voltage Amplitude
-                    <input
-                        type="range"
-                        min="0.05"
-                        max="1"
-                        step="0.01"
-                        value={voltageAmplitude}
-                        onChange={(e) => setVoltageAmplitude(parseFloat(e.target.value))}
-                    />
-                </StyledSlider>
-            </div>
+            <InputSliders
+                sliders={[
+                    { name: "Frequency", value: frequency, setValue: setFrequency },
+                    { name: "Voltage Amplitude", value: voltageAmplitude, setValue: setVoltageAmplitude },
+                ]}
+            />
             <StyledPlots>
                 <ABCReferenceCircle
                     voltageSignals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}

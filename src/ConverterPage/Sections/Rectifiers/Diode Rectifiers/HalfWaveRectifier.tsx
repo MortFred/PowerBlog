@@ -6,6 +6,7 @@ import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
 import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
 import { useInView } from "react-intersection-observer";
 import MarkdownRenderer from "../../../../MarkdownRenderer";
+import InputSliders from "../../../InputSliders";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
@@ -23,11 +24,6 @@ const StyledPlots = styled.div`
 
 const StyledImage = styled.img`
     margin: 16px 16px;
-`;
-
-const StyledSlider = styled.div`
-    display: grid;
-    grid-template-columns: 150px 200px;
 `;
 
 function modifyVoltage(voltage: number) {
@@ -62,30 +58,12 @@ export function HalfWaveRectifierSection() {
                     alternateColors={true}
                     signalFunction={ACVoltageSignal}
                 />
-                <div>
-                    <StyledSlider>
-                        Frequency
-                        <input
-                            type="range"
-                            min="0.1"
-                            max="1"
-                            step="0.01"
-                            value={frequency}
-                            onChange={(e) => setFrequency(parseFloat(e.target.value))}
-                        />
-                    </StyledSlider>
-                    <StyledSlider>
-                        Voltage Amplitude
-                        <input
-                            type="range"
-                            min="0.05"
-                            max="1"
-                            step="0.01"
-                            value={voltageAmplitude}
-                            onChange={(e) => setVoltageAmplitude(parseFloat(e.target.value))}
-                        />
-                    </StyledSlider>
-                </div>
+                <InputSliders
+                    sliders={[
+                        { name: "Frequency", value: frequency, setValue: setFrequency },
+                        { name: "Voltage Amplitude", value: voltageAmplitude, setValue: setVoltageAmplitude },
+                    ]}
+                />
                 <StyledPlots>
                     <SignalPlot width={400} signals={[rawVoltageSignal]} />
                     <SignalPlot width={400} signals={[modifiedVoltage]} />
