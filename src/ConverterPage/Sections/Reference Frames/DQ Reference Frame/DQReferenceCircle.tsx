@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { drawArrow, drawCircle, getCenter, sumVectors } from "../ABC Reference Frame/ABCReferenceCircle";
 
-const drawReferenceFrame = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: number) => {
+const drawReferenceFrame = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: number, theta: number) => {
     if (!canvasRef.current) return;
+    theta = -theta;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -19,23 +20,26 @@ const drawReferenceFrame = (canvasRef: React.RefObject<HTMLCanvasElement>, radiu
     ctx.font = "16px Avenir";
     ctx.strokeStyle = "Black";
     ctx.fillStyle = "Black";
-    drawArrowWithLabel(0, "α");
-    drawArrowWithLabel(-Math.PI / 2, "β");
+    drawArrowWithLabel(theta, "d");
+    drawArrowWithLabel(theta - Math.PI / 2, "q");
 };
 
 interface ReferenceFrameProps {
     voltageSignals: Array<[number, string]>;
+    theta: number;
 }
 
-const AlphaBetaReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignals }: ReferenceFrameProps) => {
+const DQReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignals, theta }: ReferenceFrameProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     let animationFrameId: number;
     const radius = 130;
     const arrowWidth = 3;
     let latestSignalValues = useRef(voltageSignals.map(() => [0, "blue"] as [number, string]));
+    let latestTheta = useRef(theta);
 
     useEffect(() => {
         latestSignalValues.current = voltageSignals;
+        latestTheta.current = theta;
     }, [voltageSignals]);
 
     const animate = () => {
@@ -44,14 +48,17 @@ const AlphaBetaReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignal
             if (ctx) {
                 let combinedSignalValue: [number, number] = [0, 0];
                 drawCircle(canvasRef, radius);
-                drawReferenceFrame(canvasRef, radius);
+                drawReferenceFrame(canvasRef, radius, latestTheta.current);
                 latestSignalValues.current.map((signal, index) => {
                     let signalValue = signal[0] * radius;
                     let signalColor = signal[1];
                     ctx.strokeStyle = signalColor;
                     ctx.fillStyle = signalColor;
-                    drawArrow(canvasRef, index * (Math.PI / 2), signalValue, arrowWidth);
-                    combinedSignalValue = sumVectors(combinedSignalValue, [signalValue, index * (Math.PI / 2)]);
+                    drawArrow(canvasRef, -latestTheta.current - index * (Math.PI / 2), signalValue, arrowWidth);
+                    combinedSignalValue = sumVectors(combinedSignalValue, [
+                        signalValue,
+                        -latestTheta.current - index * (Math.PI / 2),
+                    ]);
                 });
                 ctx.strokeStyle = "#06eaff";
                 ctx.fillStyle = "#06eaff";
@@ -69,4 +76,4 @@ const AlphaBetaReferenceCircle: React.FC<ReferenceFrameProps> = ({ voltageSignal
     return <canvas ref={canvasRef} width={400} height={400} />;
 };
 
-export default AlphaBetaReferenceCircle;
+export default DQReferenceCircle;

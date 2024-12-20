@@ -25,3 +25,5 @@ i_b(t)\\
 i_c(t)
 \end{bmatrix}
 $$
+
+The $\alpha\beta$ reference frame is often used in conjunction with space-vector modulation (SVM) of three-phase converters.
