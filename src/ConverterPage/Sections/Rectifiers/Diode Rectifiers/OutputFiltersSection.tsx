@@ -92,8 +92,19 @@ export function OutputFiltersSection() {
                 <Line data={data} options={options} />
             </div> */}
             <StyledConversionDisplay>
-                <SignalGenerator setOutput={setInputCurrentSignal} signalFunction={ACCurrentSignal} />
-                <SignalGenerator setOutput={setOutputCurrentSignal} signalFunction={filterSignal} />
+                <SignalGenerator
+                    setOutput={setInputCurrentSignal}
+                    signalFunction={ACCurrentSignal}
+                    setTime={() => {}}
+                    isPaused={false}
+                />
+
+                <SignalGenerator
+                    setOutput={setOutputCurrentSignal}
+                    signalFunction={filterSignal}
+                    setTime={() => {}}
+                    isPaused={false}
+                />
                 <div>
                     <StyledSlider>
                         Frequency
@@ -141,7 +152,7 @@ export function OutputFiltersSection() {
                     </StyledSlider>
                 </div>
                 <StyledPlots>
-                    <SignalPlot isPaused={isPaused} width={400} signals={[inputCurrentSignal]} />
+                    <SignalPlot isPaused={false} width={400} signals={[inputCurrentSignal]} />
                     {/* <SignalPlot isPaused={isPaused} width={400} signal={outputCurrentSignal} /> */}
                 </StyledPlots>
             </StyledConversionDisplay>

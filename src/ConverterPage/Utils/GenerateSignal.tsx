@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 
 interface SignalProps {
     setOutput: (output: [number, string]) => void;
@@ -36,7 +36,6 @@ export function SignalGenerator({
 
     useEffect(() => {
         animationFrameId = requestAnimationFrame(animate);
-        console.log(isPaused);
         return () => cancelAnimationFrame(animationFrameId);
     }, [signalFunction, isPaused]);
 

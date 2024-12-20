@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from "react";
 
-const getCenter = (canvas: HTMLCanvasElement) => {
+export const getCenter = (canvas: HTMLCanvasElement) => {
     return [canvas.width / 2, canvas.height / 2];
 };
 
-const sumVectors = (v1: [number, number], v2: [number, number]): [number, number] => {
+export const sumVectors = (v1: [number, number], v2: [number, number]): [number, number] => {
     let x = v1[0] * Math.cos(v1[1]) + v2[0] * Math.cos(v2[1]);
     let y = v1[0] * Math.sin(v1[1]) + v2[0] * Math.sin(v2[1]);
     let r = Math.sqrt(x * x + y * y);
@@ -12,7 +12,7 @@ const sumVectors = (v1: [number, number], v2: [number, number]): [number, number
     return [r, theta];
 };
 
-const drawCircle = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: number = 60) => {
+export const drawCircle = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: number = 60) => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -33,7 +33,7 @@ const drawCircle = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: numbe
     ctx.setLineDash([]);
 };
 
-const drawArrow = (
+export const drawArrow = (
     canvasRef: React.RefObject<HTMLCanvasElement>,
     angle: number,
     arrowLength: number = 30,
