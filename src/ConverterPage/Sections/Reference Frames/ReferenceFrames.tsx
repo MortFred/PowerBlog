@@ -2,6 +2,7 @@ import MarkdownRenderer from "../../../MarkdownRenderer";
 import { ABCReferenceFrameSection } from "./ABC Reference Frame/ABCReferenceFrame";
 import { AlphaBetaReferenceFrameSection } from "./AlphaBeta Reference Frame/AlphaBetaReferenceFrame";
 import { DQReferenceFrameSection } from "./DQ Reference Frame/DQReferenceFrame";
+import { DQToABCConversionSection } from "./DQ-ABC Conversion/DQToABCConversion";
 import ReferenceFrameInfo from "./Reference_frames.md";
 
 export function ReferenceFrameSection() {
@@ -11,6 +12,7 @@ export function ReferenceFrameSection() {
             <ABCReferenceFrameSection />
             <AlphaBetaReferenceFrameSection />
             <DQReferenceFrameSection />
+            <DQToABCConversionSection />
         </section>
     );
 }

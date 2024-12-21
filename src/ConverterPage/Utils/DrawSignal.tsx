@@ -4,11 +4,12 @@ interface SignalPlotProps {
     width: number;
     signals: Array<[number, string]>;
     isPaused: boolean;
+    height?: number;
 }
 
-export function SignalPlot({ width, signals, isPaused }: SignalPlotProps) {
+export function SignalPlot({ width, signals, isPaused, height }: SignalPlotProps) {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const height = 400;
+    height = height ? height : 400;
     let animationFrameId: number;
 
     let signalWindows = useRef(
@@ -72,7 +73,7 @@ export function SignalPlot({ width, signals, isPaused }: SignalPlotProps) {
 
             for (let x = 6; x < width; x++) {
                 const index = (signalIndex.current + x) % width;
-                let signalValue = signalWindow[index][0] * (height / 2 - 50);
+                let signalValue = signalWindow[index][0] * (height / 2 - 80);
                 let signalColor = signalWindow[index][1];
 
                 ctx.lineTo(x, height / 2 - signalValue);

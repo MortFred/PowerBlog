@@ -14,7 +14,7 @@ const StyledSlider = styled.div`
 `;
 
 interface InputSliderProps {
-    sliders: { name: string; value: number; setValue: (value: number) => void }[];
+    sliders: { name: string; value: number; setValue: (value: number) => void; min?: number }[];
     pauseAnimation: (value: boolean) => void;
 }
 
@@ -30,7 +30,7 @@ export default function InputSliders({ sliders, pauseAnimation }: InputSliderPro
             {slider.name}
             <input
                 type="range"
-                min="0.05"
+                min={slider.min ? slider.min : "0"}
                 max="1"
                 step="0.01"
                 value={slider.value}

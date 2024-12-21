@@ -1,0 +1,91 @@
+import React, { useRef, useEffect } from "react";
+import { drawArrow, drawCircle, getCenter, sumVectors } from "../ABC Reference Frame/ABCReferenceCircle";
+
+const drawReferenceFrame = (canvasRef: React.RefObject<HTMLCanvasElement>, radius: number, theta: number) => {
+    if (!canvasRef.current) return;
+    theta = -theta;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const [centerX, centerY] = getCenter(canvas);
+
+    const drawArrowWithLabel = (angle: number, label: string) => {
+        drawArrow(canvasRef, angle, radius + 30);
+        const labelPosition = 50;
+        const endX = centerX + radius * Math.cos(angle);
+        const endY = centerY + radius * Math.sin(angle);
+        ctx.fillText(label, endX + labelPosition * Math.cos(angle), endY + labelPosition * Math.sin(angle) + 4);
+    };
+
+    ctx.font = "16px Avenir";
+    ctx.strokeStyle = "Black";
+    ctx.fillStyle = "Black";
+    drawArrowWithLabel(theta, "d");
+    drawArrowWithLabel(theta - Math.PI / 2, "q");
+};
+
+interface ReferenceFrameProps {
+    voltageSignals: Array<[number, number, string]>;
+    currentVectors: Array<[number, string]>;
+    theta: number;
+}
+
+const DQToABCCircle: React.FC<ReferenceFrameProps> = ({
+    voltageSignals,
+    currentVectors,
+    theta,
+}: ReferenceFrameProps) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    let animationFrameId: number;
+    const radius = 130;
+    const arrowWidth = 3;
+    let latestVoltageSignalValues = useRef(voltageSignals.map(() => [0, 0, "blue"] as [number, number, string]));
+    let latestCurrentSignalValues = useRef(voltageSignals.map(() => [0, "blue"] as [number, string]));
+    let latestTheta = useRef(theta);
+
+    useEffect(() => {
+        latestVoltageSignalValues.current = voltageSignals;
+        latestCurrentSignalValues.current = currentVectors;
+        latestTheta.current = theta;
+    }, [voltageSignals]);
+
+    const animate = () => {
+        if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext("2d");
+            if (ctx) {
+                let combinedSignalValue: [number, number] = [0, 0];
+                drawCircle(canvasRef, radius);
+                drawReferenceFrame(canvasRef, radius, latestTheta.current);
+                latestCurrentSignalValues.current.map((signal, index) => {
+                    let signalValue = signal[0] * radius;
+                    let signalColor = signal[1];
+                    ctx.strokeStyle = signalColor;
+                    ctx.fillStyle = signalColor;
+                    drawArrow(canvasRef, -latestTheta.current - index * (Math.PI / 2), signalValue, arrowWidth);
+                    combinedSignalValue = sumVectors(combinedSignalValue, [
+                        signalValue,
+                        -latestTheta.current - index * (Math.PI / 2),
+                    ]);
+                });
+                ctx.strokeStyle = "#06eaff";
+                ctx.fillStyle = "#06eaff";
+                drawArrow(canvasRef, combinedSignalValue[1], combinedSignalValue[0], arrowWidth);
+                latestVoltageSignalValues.current.map((signal) => {
+                    ctx.strokeStyle = signal[2];
+                    ctx.fillStyle = signal[2];
+                    drawArrow(canvasRef, signal[1], signal[0] * radius, arrowWidth);
+                });
+            }
+        }
+        animationFrameId = requestAnimationFrame(animate);
+    };
+
+    useEffect(() => {
+        animationFrameId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrameId);
+    }, []);
+
+    return <canvas ref={canvasRef} width={400} height={400} />;
+};
+
+export default DQToABCCircle;
