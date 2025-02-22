@@ -68,7 +68,7 @@ export function OutputFiltersSection() {
     const [R, setR] = useState(0.4);
     const [C, setC] = useState(0.4);
     const [inputCurrentSignal, setInputCurrentSignal] = useState<[number, string]>([0, "black"]);
-    const [outputCurrentSignal, setOutputCurrentSignal] = useState<[number, string]>([0, "black"]);
+    // const [outputCurrentSignal, setOutputCurrentSignal] = useState<[number, string]>([0, "black"]);
 
     const { ref } = useInView({
         threshold: 0,
@@ -78,12 +78,12 @@ export function OutputFiltersSection() {
         return currentAmplitude * Math.sin(time * frequency);
     }
 
-    function filterSignal(time: number) {
-        let a = 1 / (C ^ (2 * R) ^ (2 * frequency) ^ (2 + 1));
-        let b = (1 / frequency) * Math.sin(frequency * time);
-        let c = C * R * Math.cos(frequency * time);
-        return a * (b - c);
-    }
+    // function filterSignal(time: number) {
+    //     let a = 1 / (C ^ (2 * R) ^ (2 * frequency) ^ (2 + 1));
+    //     let b = (1 / frequency) * Math.sin(frequency * time);
+    //     let c = C * R * Math.cos(frequency * time);
+    //     return a * (b - c);
+    // }
 
     return (
         <section id="output-filters" ref={ref}>
@@ -99,12 +99,12 @@ export function OutputFiltersSection() {
                     isPaused={false}
                 />
 
-                <SignalGenerator
+                {/* <SignalGenerator
                     setOutput={setOutputCurrentSignal}
                     signalFunction={filterSignal}
                     setTime={() => {}}
                     isPaused={false}
-                />
+                /> */}
                 <div>
                     <StyledSlider>
                         Frequency
