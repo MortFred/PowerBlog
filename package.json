@@ -1,9 +1,9 @@
 {
-  "name": "electrical-visualisations",
-  "private": true,
+  "homepage": "https://mortfred.github.io/PowerBlog/",
+  "name": "power-blog",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://MortFred.github.io/PowerBlog",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
