@@ -13,6 +13,7 @@ const StyledPageLayout = styled.div`
     padding: 32px;
     gap: 32px;
 `;
+
 const StyledContent = styled.div`
     grid-area: content;
     display: flex;
@@ -24,6 +25,9 @@ const StyledContent = styled.div`
 
 export function ConverterPage() {
     const [activeSection, setActiveSection] = useState<string>("");
+    const handleTOCLinkClick = (sectionId: string) => {
+        setActiveSection(sectionId);
+    };
 
     useEffect(() => {
         const sections = document.querySelectorAll("section");
@@ -39,7 +43,6 @@ export function ConverterPage() {
         );
 
         sections.forEach((section) => observer.observe(section));
-
         return () => {
             sections.forEach((section) => observer.unobserve(section));
         };
@@ -48,14 +51,18 @@ export function ConverterPage() {
     return (
         <StyledPageLayout id="converter-page">
             <div></div>
-            <TableOfContents activeSection={activeSection} />
+            <TableOfContents
+                activeSection={activeSection}
+                onTOCLinkClick={handleTOCLinkClick}
+            />
             <StyledContent>
                 <section id="introduction">
                     <MarkdownRenderer content={Introduction} />
                 </section>
                 <RectifierSection />
                 <ReferenceFrameSection />
-            </StyledContent>
-        </StyledPageLayout>
+            </ StyledContent>
+        </ StyledPageLayout>
     );
 }
+

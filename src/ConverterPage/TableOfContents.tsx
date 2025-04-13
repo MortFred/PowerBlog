@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import arrow from "./Icons/arrow.svg";
+import React from "react";
 
 const StyledTOC = styled.div`
     grid-area: toc;
@@ -34,10 +35,30 @@ const TOCLink: React.FC<{
     level: number;
     activeSection: string;
     toggleExpanded: Dispatch<SetStateAction<boolean>>;
-}> = ({ title, href, level, activeSection, toggleExpanded }) => {
+    onTOCLinkClick?: (sectionId: string, level: number) => void;
+}> = ({
+    title,
+    href,
+    level,
+    activeSection,
+    toggleExpanded,
+    onTOCLinkClick
+}) => {
     let isActive = "#" + activeSection === href;
+
+    const handleClick = () => {
+        if (onTOCLinkClick) {
+            onTOCLinkClick(href.replace('#', ''), level);
+        }
+        toggleExpanded(true);
+    };
     return (
-        <StyledTOCLink level={level} href={href} onClick={() => toggleExpanded(true)} isActive={isActive}>
+        <StyledTOCLink
+            level={level}
+                href={href}
+            onClick={handleClick}
+            isActive={isActive}
+        >
             {title}
         </StyledTOCLink>
     );
@@ -50,7 +71,16 @@ const TOCLinkWithButton: React.FC<{
     isExpanded: boolean;
     activeSection: string;
     toggleExpanded: Dispatch<SetStateAction<boolean>>;
-}> = ({ title, href, level, isExpanded, activeSection, toggleExpanded }) => {
+    onTOCLinkClick?: (sectionId: string, level: number) => void;
+}> = ({
+    title,
+    href,
+    level,
+    isExpanded,
+    activeSection,
+    toggleExpanded,
+    onTOCLinkClick
+}) => {
     return (
         <StyledTOCLinkWithButton level={0}>
             <TOCLink
@@ -59,6 +89,7 @@ const TOCLinkWithButton: React.FC<{
                 level={level}
                 activeSection={activeSection}
                 toggleExpanded={toggleExpanded}
+                onTOCLinkClick={onTOCLinkClick}
             />
             <img
                 onClick={() => toggleExpanded(!isExpanded)}
@@ -70,7 +101,13 @@ const TOCLinkWithButton: React.FC<{
     );
 };
 
-export function TableOfContents({ activeSection }: { activeSection: string }) {
+export function TableOfContents({
+    activeSection,
+    onTOCLinkClick
+}: {
+    activeSection: string;
+    onTOCLinkClick?: (sectionId: string, level: number) => void;
+}) {
     const [isRectifierCircuitsExpanded, setRectifierCircuitsExpanded] = useState(false);
     const [isReferenceFramesExpanded, setReferenceFramesExpanded] = useState(false);
     const [isDiodeRectifiersExpanded, setDiodeRectifiersExpanded] = useState(false);
@@ -83,6 +120,7 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                 level={0}
                 activeSection={activeSection}
                 toggleExpanded={() => {}}
+                onTOCLinkClick={onTOCLinkClick}
             />
             <TOCLinkWithButton
                 title="Rectifier Circuits"
@@ -91,6 +129,7 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                 isExpanded={isRectifierCircuitsExpanded}
                 toggleExpanded={setRectifierCircuitsExpanded}
                 activeSection={activeSection}
+                onTOCLinkClick={onTOCLinkClick}
             />
             {isRectifierCircuitsExpanded && (
                 <>
@@ -101,15 +140,17 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                         isExpanded={isDiodeRectifiersExpanded}
                         toggleExpanded={setDiodeRectifiersExpanded}
                         activeSection={activeSection}
+                        onTOCLinkClick={onTOCLinkClick}
                     />
                     {isDiodeRectifiersExpanded && (
-                        <>
+                        <React.Fragment>
                             <TOCLink
                                 title={"Half-Wave Rectifiers"}
                                 href={"#half-wave-rectifiers"}
                                 level={3}
                                 activeSection={activeSection}
                                 toggleExpanded={() => {}}
+                                onTOCLinkClick={onTOCLinkClick}
                             />
                             <TOCLink
                                 title={"Full-Wave Rectifiers"}
@@ -117,6 +158,7 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                                 level={3}
                                 activeSection={activeSection}
                                 toggleExpanded={() => {}}
+                                onTOCLinkClick={onTOCLinkClick}
                             />
                             <TOCLink
                                 title={"Output Filter"}
@@ -124,8 +166,9 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                                 level={3}
                                 activeSection={activeSection}
                                 toggleExpanded={() => {}}
+                                onTOCLinkClick={onTOCLinkClick}
                             />
-                        </>
+                        </React.Fragment>
                     )}
                 </>
             )}
@@ -136,18 +179,21 @@ export function TableOfContents({ activeSection }: { activeSection: string }) {
                 isExpanded={isReferenceFramesExpanded}
                 toggleExpanded={setReferenceFramesExpanded}
                 activeSection={activeSection}
+                onTOCLinkClick={onTOCLinkClick}
             />
             {isReferenceFramesExpanded && (
-                <>
+                <React.Fragment>
                     <TOCLink
                         title={"ABC Reference Frame"}
                         href={"#abc-reference"}
                         level={2}
                         activeSection={activeSection}
                         toggleExpanded={() => {}}
+                        onTOCLinkClick={onTOCLinkClick}
                     />
-                </>
+                </React.Fragment>
             )}
         </StyledTOC>
     );
 }
+
