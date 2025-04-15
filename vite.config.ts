@@ -1,9 +1,11 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), 
+  plugins: [
+    react(),
     // Custom plugin to load markdown files
     {
       name: "markdown-loader",
@@ -12,8 +14,9 @@ export default defineConfig({
           // For .md files, get the raw content
           return `export default ${JSON.stringify(code)};`;
         }
-      }
-    }
+      },
+    },
+    tailwindcss(),
   ],
-  base: "/PowerBlog/"
-})
+  base: "/PowerBlog/",
+});
