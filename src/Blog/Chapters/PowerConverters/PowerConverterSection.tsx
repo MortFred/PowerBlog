@@ -23,7 +23,7 @@ const StyledContent = styled.div`
     overflow-x: auto;
 `;
 
-export function ConverterPage() {
+export function PowerConverters() {
     const [activeSection, setActiveSection] = useState<string>("");
     const handleTOCLinkClick = (sectionId: string) => {
         setActiveSection(sectionId);
