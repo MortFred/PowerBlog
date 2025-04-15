@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { SignalGenerator } from "../../../Utils/GenerateSignal";
-import ABCReferenceCircle from "./ABCReferenceCircle";
-import ABCReferenceFrameText from "./ABC_reference_frame.md";
-import { useState } from "react";
+import DQReferenceFrameText from "./DQ_reference_frame.md";
+import { useEffect, useState } from "react";
 import { SignalPlot } from "../../../Utils/DrawSignal";
 import InputSliders from "../../../Utils/InputSliders";
+import DQReferenceCircle from "./DQReferenceCircle";
+import MarkdownRenderer from "../../../../../../MarkdownRenderer";
 
 const StyledPlots = styled.div`
     display: flex;
@@ -13,12 +13,18 @@ const StyledPlots = styled.div`
     gap: 64px;
 `;
 
-export function ABCReferenceFrameSection() {
+export function DQReferenceFrameSection() {
     const [rawVoltageSignalPhaseA, setRawVoltageSignalPhaseA] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseB, setRawVoltageSignalPhaseB] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseC, setRawVoltageSignalPhaseC] = useState<[number, string]>([0, "black"]);
+    const [alphaSignal, setAlphaSignal] = useState<[number, string]>([0, "black"]);
+    const [betaSignal, setBetaSignal] = useState<[number, string]>([0, "black"]);
+    const [dSignal, setDSignal] = useState<[number, string]>([0, "black"]);
+    const [qSignal, setQSignal] = useState<[number, string]>([0, "black"]);
     const [isPaused, setIsPaused] = useState(false);
     const [frequency, setFrequency] = useState(0.1);
+    const [time, setTime] = useState(0);
+    const [theta, setTheta] = useState(0);
     const [voltageAmplitude, setVoltageAmplitude] = useState(0.7);
 
     function ACVoltageSignalPhaseA(time: number) {
@@ -31,15 +37,33 @@ export function ABCReferenceFrameSection() {
         return voltageAmplitude * Math.sin(time * frequency * 0.01 + (Math.PI * 4) / 3);
     }
 
+    useEffect(() => {
+        setAlphaSignal([
+            (2 / 3) * rawVoltageSignalPhaseA[0] -
+                (1 / 3) * rawVoltageSignalPhaseB[0] -
+                (1 / 3) * rawVoltageSignalPhaseC[0],
+            "red",
+        ]);
+        setBetaSignal([(1 / Math.sqrt(3)) * (rawVoltageSignalPhaseB[0] - rawVoltageSignalPhaseC[0]), "blue"]);
+    }, [time]);
+
+    useEffect(() => {
+        const theta = time * frequency * 0.01;
+        setDSignal([betaSignal[0] * Math.cos(theta) + alphaSignal[0] * Math.sin(theta), "red"]);
+        setQSignal([-betaSignal[0] * Math.sin(theta) + alphaSignal[0] * Math.cos(theta), "blue"]);
+        setTheta(theta);
+    }, [alphaSignal]);
+
     return (
-        <section id="abc-reference">
-            <MarkdownRenderer content={ABCReferenceFrameText} />
+        <section id="dq-reference">
+            <MarkdownRenderer content={DQReferenceFrameText} />
             <SignalGenerator
                 setOutput={setRawVoltageSignalPhaseA}
                 alternateColors={false}
                 signalFunction={ACVoltageSignalPhaseA}
                 signalColor="#FF0000"
                 isPaused={isPaused}
+                setTime={setTime}
             />
             <SignalGenerator
                 setOutput={setRawVoltageSignalPhaseB}
@@ -63,14 +87,8 @@ export function ABCReferenceFrameSection() {
                 pauseAnimation={setIsPaused}
             />
             <StyledPlots>
-                <ABCReferenceCircle
-                    voltageSignals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}
-                />
-                <SignalPlot
-                    isPaused={isPaused}
-                    signals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}
-                    width={400}
-                />
+                <DQReferenceCircle voltageSignals={[dSignal, qSignal]} theta={theta} />
+                <SignalPlot isPaused={isPaused} signals={[dSignal, qSignal]} width={400} />
             </StyledPlots>
         </section>
     );

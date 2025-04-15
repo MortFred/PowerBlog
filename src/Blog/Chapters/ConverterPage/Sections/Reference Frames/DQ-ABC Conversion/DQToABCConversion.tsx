@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { SignalGenerator } from "../../../Utils/GenerateSignal";
 import ConversionText from "./DQ_ABC_conversion.md";
 import { useEffect, useState } from "react";
@@ -7,6 +6,7 @@ import { SignalPlot } from "../../../Utils/DrawSignal";
 import InputSliders from "../../../Utils/InputSliders";
 import ConverterFigure from "./converter_grid.svg";
 import DQToABCCircle from "./DQToABCCircle";
+import MarkdownRenderer from "../../../../../../MarkdownRenderer";
 // import DQReferenceCircle from "./DQReferenceCircle";
 
 const StyledPlots = styled.div`

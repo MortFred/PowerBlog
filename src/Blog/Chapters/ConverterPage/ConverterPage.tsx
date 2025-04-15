@@ -1,10 +1,10 @@
 import styled from "styled-components";
-import MarkdownRenderer from "../MarkdownRenderer";
 import Introduction from "./Sections/Introduction/Introduction.md";
 import { TableOfContents } from "./TableOfContents";
 import { RectifierSection } from "./Sections/Rectifiers/RectifierSection";
 import { useEffect, useState } from "react";
 import { ReferenceFrameSection } from "./Sections/Reference Frames/ReferenceFrames";
+import MarkdownRenderer from "../../../MarkdownRenderer";
 
 const StyledPageLayout = styled.div`
     display: grid;
@@ -51,18 +51,14 @@ export function ConverterPage() {
     return (
         <StyledPageLayout id="converter-page">
             <div></div>
-            <TableOfContents
-                activeSection={activeSection}
-                onTOCLinkClick={handleTOCLinkClick}
-            />
+            <TableOfContents activeSection={activeSection} onTOCLinkClick={handleTOCLinkClick} />
             <StyledContent>
                 <section id="introduction">
                     <MarkdownRenderer content={Introduction} />
                 </section>
                 <RectifierSection />
                 <ReferenceFrameSection />
-            </ StyledContent>
-        </ StyledPageLayout>
+            </StyledContent>
+        </StyledPageLayout>
     );
 }
-

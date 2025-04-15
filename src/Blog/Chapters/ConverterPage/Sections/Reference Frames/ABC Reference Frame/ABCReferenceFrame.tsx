@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import MarkdownRenderer from "../../../../MarkdownRenderer";
 import { SignalGenerator } from "../../../Utils/GenerateSignal";
-import AlphaBetaReferenceCircle from "./AlphaBetaReferenceCircle";
-import AlphaBetaReferenceFrameText from "./Alpha_beta_reference_frame.md";
-import { useEffect, useState } from "react";
+import ABCReferenceCircle from "./ABCReferenceCircle";
+import ABCReferenceFrameText from "./ABC_reference_frame.md";
+import { useState } from "react";
 import { SignalPlot } from "../../../Utils/DrawSignal";
 import InputSliders from "../../../Utils/InputSliders";
+import MarkdownRenderer from "../../../../../../MarkdownRenderer";
 
 const StyledPlots = styled.div`
     display: flex;
@@ -13,12 +13,10 @@ const StyledPlots = styled.div`
     gap: 64px;
 `;
 
-export function AlphaBetaReferenceFrameSection() {
+export function ABCReferenceFrameSection() {
     const [rawVoltageSignalPhaseA, setRawVoltageSignalPhaseA] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseB, setRawVoltageSignalPhaseB] = useState<[number, string]>([0, "black"]);
     const [rawVoltageSignalPhaseC, setRawVoltageSignalPhaseC] = useState<[number, string]>([0, "black"]);
-    const [alphaSignal, setAlphaSignal] = useState<[number, string]>([0, "black"]);
-    const [betaSignal, setBetaSignal] = useState<[number, string]>([0, "black"]);
     const [isPaused, setIsPaused] = useState(false);
     const [frequency, setFrequency] = useState(0.1);
     const [voltageAmplitude, setVoltageAmplitude] = useState(0.7);
@@ -33,19 +31,9 @@ export function AlphaBetaReferenceFrameSection() {
         return voltageAmplitude * Math.sin(time * frequency * 0.01 + (Math.PI * 4) / 3);
     }
 
-    useEffect(() => {
-        setAlphaSignal([
-            (2 / 3) * rawVoltageSignalPhaseA[0] -
-                (1 / 3) * rawVoltageSignalPhaseB[0] -
-                (1 / 3) * rawVoltageSignalPhaseC[0],
-            "red",
-        ]);
-        setBetaSignal([(1 / Math.sqrt(3)) * (rawVoltageSignalPhaseB[0] - rawVoltageSignalPhaseC[0]), "blue"]);
-    }, [rawVoltageSignalPhaseA]);
-
     return (
-        <section id="alpha-beta-reference">
-            <MarkdownRenderer content={AlphaBetaReferenceFrameText} />
+        <section id="abc-reference">
+            <MarkdownRenderer content={ABCReferenceFrameText} />
             <SignalGenerator
                 setOutput={setRawVoltageSignalPhaseA}
                 alternateColors={false}
@@ -75,8 +63,14 @@ export function AlphaBetaReferenceFrameSection() {
                 pauseAnimation={setIsPaused}
             />
             <StyledPlots>
-                <AlphaBetaReferenceCircle voltageSignals={[alphaSignal, betaSignal]} />
-                <SignalPlot isPaused={isPaused} signals={[alphaSignal, betaSignal]} width={400} />
+                <ABCReferenceCircle
+                    voltageSignals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}
+                />
+                <SignalPlot
+                    isPaused={isPaused}
+                    signals={[rawVoltageSignalPhaseA, rawVoltageSignalPhaseB, rawVoltageSignalPhaseC]}
+                    width={400}
+                />
             </StyledPlots>
         </section>
     );

@@ -1,13 +1,12 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-import FullWaveRectifiers from "./Text/Full-wave_rectifier.md";
-import FullWaveRectifierFigure1 from "./Figures/full-wave_rectifier_1.svg";
-import FullWaveRectifierFigure2 from "./Figures/full-wave_rectifier_2.svg";
 import { SignalGenerator } from "../../../Utils/GenerateSignal";
 import { SignalPlot } from "../../../Utils/DrawSignal";
+import { useEffect, useState } from "react";
+import HalfWaveRectifiers from "./Text/Half-wave_rectifier.md";
+import HalfWaveRectifierFigure from "./Figures/half_wave_rectifier.svg";
 import { useInView } from "react-intersection-observer";
-import MarkdownRenderer from "../../../../MarkdownRenderer";
 import InputSliders from "../../../Utils/InputSliders";
+import MarkdownRenderer from "../../../../../../MarkdownRenderer";
 
 const StyledConversionDisplay = styled.div`
     display: flex;
@@ -28,16 +27,18 @@ const StyledImage = styled.img`
 `;
 
 function modifyVoltage(voltage: number) {
-    return Math.abs(voltage);
+    if (voltage < 0) {
+        return 0;
+    }
+    return voltage;
 }
 
-export function FullWaveRectifierSection() {
+export function HalfWaveRectifierSection() {
     const [frequency, setFrequency] = useState(0.3);
     const [voltageAmplitude, setVoltageAmplitude] = useState(0.5);
     const [rawVoltageSignal, setRawVoltageSignal] = useState<[number, string]>([0, "black"]);
     const [modifiedVoltage, setModifiedVoltage] = useState<[number, string]>([0, "black"]);
     const [isPaused, setIsPaused] = useState(false);
-
     const { ref } = useInView({ threshold: 0 });
 
     function ACVoltageSignal(time: number) {
@@ -49,13 +50,9 @@ export function FullWaveRectifierSection() {
     }, [rawVoltageSignal]);
 
     return (
-        <section id="full-wave-rectifiers" ref={ref}>
-            <MarkdownRenderer content={FullWaveRectifiers} />
-            {rawVoltageSignal[0] < 0 ? (
-                <StyledImage src={FullWaveRectifierFigure2} alt="Full-wave diode bridge rectifier" width={"400px"} />
-            ) : (
-                <StyledImage src={FullWaveRectifierFigure1} alt="Full-wave diode bridge rectifier" width={"400px"} />
-            )}
+        <section id="half-wave-rectifiers" ref={ref}>
+            <MarkdownRenderer content={HalfWaveRectifiers} />
+            <StyledImage src={HalfWaveRectifierFigure} alt="Simple rectifier circuit" width={"400px"} />
             <StyledConversionDisplay>
                 <SignalGenerator
                     setOutput={setRawVoltageSignal}
