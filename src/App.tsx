@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import worker from "./worker?worker";
-import { PowerConverters } from "./Blog/Chapters/PowerConverters/PowerConverterSection";
+import { BlogFrontPage } from "./Blog/BlogFrontPage";
 const workerInstance = new worker();
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     });
     return (
         <>
-            <PowerConverters />
+            <BlogFrontPage />
         </>
     );
 }
