@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import worker from "./worker?worker";
-import { BlogFrontPage } from "./Blog/BlogFrontPage";
+import { HomePage } from "./HomePage/HomePage";
 const workerInstance = new worker();
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     });
     return (
         <>
-            <BlogFrontPage />
+            <HomePage />
         </>
     );
 }
