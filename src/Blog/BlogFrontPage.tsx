@@ -3,28 +3,7 @@ import BlogIntroduction from "./BlogIntroduction.md";
 
 export function BlogFrontPage() {
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Navigation */}
-            <nav className="bg-white shadow-sm">
-                <div className="max-w-4xl mx-auto px-4 py-3">
-                    <div className="flex justify-between items-center">
-                        <h1 className="text-xl font-bold text-gray-800">My Blog</h1>
-                        <div className="space-x-4">
-                            <a href="#" className="text-gray-600 hover:text-gray-900">
-                                Home
-                            </a>
-                            <a href="#" className="text-gray-600 hover:text-gray-900">
-                                Archive
-                            </a>
-                            <a href="#" className="text-gray-600 hover:text-gray-900">
-                                About
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            {/* Main Content */}
+        <div>
             <main className="max-w-4xl mx-auto px-4 py-8">
                 {/* Blog Introduction Section */}
                 <section className="mb-12 bg-white rounded-lg shadow-sm p-6">
@@ -85,16 +64,6 @@ export function BlogFrontPage() {
                     </div>
                 </section>
             </main>
-
-            {/* Footer */}
-            <footer className="bg-white border-t mt-12">
-                <div className="max-w-4xl mx-auto px-4 py-6">
-                    <div className="text-center text-gray-600">
-                        <p>© 2024 My Blog. All rights reserved.</p>
-                        <p className="mt-2">Built with Next.js and Tailwind CSS</p>
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 }
