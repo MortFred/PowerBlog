@@ -1,71 +1,50 @@
 import { NavLink, useLocation } from "react-router-dom";
-
-interface NavigationItem {
-    id: string;
-    label: string;
-    children?: NavigationItem[];
-}
-
-type NavTree = {
-    Home: NavigationItem;
-    AboutMe: NavigationItem;
-    Blog: NavigationItem;
-};
-
-const navigationData: NavTree = {
-    Home: {
-        id: "home",
-        label: "Home",
-    },
-    AboutMe: {
-        id: "about-me",
-        label: "About Me",
-    },
-    Blog: {
-        id: "blog-root",
-        label: "Power Electronics",
-        children: [
-            {
-                id: "power-electronics-basics",
-                label: "Basics",
-                children: [
-                    { id: "introduction", label: "Introduction" },
-                    { id: "fundamentals", label: "Fundamentals" },
-                ],
-            },
-            {
-                id: "advanced-topics",
-                label: "Advanced Topics",
-                children: [
-                    { id: "converter-types", label: "Converter Types" },
-                    { id: "control-strategies", label: "Control Strategies" },
-                ],
-            },
-        ],
-    },
-};
-
-const renderNavItems = (selectedSectionId: string, items?: NavigationItem[]) => {
-    return items?.map((item) => (
-        <li key={item.id} className="ml-4">
-            <NavLink
-                to={`/${item.id.replace("-", "/")}`}
-                className={({ isActive }) =>
-                    `text-gray-600 hover:text-gray-900 ${selectedSectionId === item.id ? "font-bold" : ""}`
-                }
-            >
-                {item.label}
-            </NavLink>
-            {item.children && <ul className="ml-4">{renderNavItems(selectedSectionId, item.children)}</ul>}
-        </li>
-    ));
-};
+import { navigationData, NavigationItem } from "./NavigationTree";
+import { FiChevronRight, FiChevronDown } from "react-icons/fi";
+import { useState } from "react";
 
 export default function NavigationSideBar() {
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
     const location = useLocation();
     const pathArray = location.pathname.split("/").filter(Boolean);
     const selectedSectionId = pathArray.join("-");
 
+    const toggleSection = (sectionId: string) => {
+        setExpandedSections((prev: Record<string, boolean>) => ({
+            ...prev,
+            [sectionId]: !prev[sectionId],
+        }));
+    };
+
+    const renderNavItems = (selectedSectionId: string, items?: NavigationItem[]) => {
+        return items?.map((item) => (
+            <li key={item.id} className="ml-4">
+                <div
+                    className="flex items-center gap-2 cursor-pointer"
+                    onClick={() => item.children && toggleSection(item.id)}
+                >
+                    {item.children ? (
+                        expandedSections[item.id] ? (
+                            <FiChevronDown size={16} />
+                        ) : (
+                            <FiChevronRight size={16} />
+                        )
+                    ) : null}
+                    <NavLink
+                        to={`/${item.id.replace("-", "/")}`}
+                        className={({ isActive }) =>
+                            `text-gray-600 hover:text-gray-900 ${selectedSectionId === item.id ? "font-bold" : ""}`
+                        }
+                    >
+                        {item.label}
+                    </NavLink>
+                </div>
+                {item.children && expandedSections[item.id] && (
+                    <ul className="ml-4">{renderNavItems(selectedSectionId, item.children)}</ul>
+                )}
+            </li>
+        ));
+    };
     return (
         <nav className="fixed left-0 top-0 h-full bg-white shadow-lg w-[200px] p-4">
             <div className="flex flex-col gap-8 justify-start items-center">
