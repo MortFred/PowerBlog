@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationBar from "./HomePage/NavigationSideBar";
 import { BlogFrontPage } from "./Blog/BlogFrontPage";
 import { HomePage } from "./HomePage/HomePage";
+import { TestPage } from "./TestPage/TestPage";
 
 export default function App() {
     return (
@@ -14,6 +15,7 @@ export default function App() {
                     <Routes>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/blog" element={<BlogFrontPage />} />
+                        <Route path="/test" element={<TestPage />} />
                     </Routes>
                     <footer className="bg-white border-t mt-12">
                         <div className="max-w-4xl mx-auto px-4 py-6">

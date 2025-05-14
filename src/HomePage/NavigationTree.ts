@@ -8,6 +8,7 @@ type NavTree = {
     Home: NavigationItem;
     AboutMe: NavigationItem;
     Blog: NavigationItem;
+    Test: NavigationItem;
 };
 
 export const navigationData: NavTree = {
@@ -40,5 +41,9 @@ export const navigationData: NavTree = {
                 ],
             },
         ],
+    },
+    Test: {
+        id: "test",
+        label: "Test Page",
     },
 };

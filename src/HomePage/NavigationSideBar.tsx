@@ -23,13 +23,6 @@ export default function NavigationSideBar() {
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={() => item.children && toggleSection(item.id)}
                 >
-                    {item.children ? (
-                        expandedSections[item.id] ? (
-                            <FiChevronDown size={16} />
-                        ) : (
-                            <FiChevronRight size={16} />
-                        )
-                    ) : null}
                     <NavLink
                         to={`/${item.id.replace("-", "/")}`}
                         className={({ isActive }) =>
@@ -38,6 +31,13 @@ export default function NavigationSideBar() {
                     >
                         {item.label}
                     </NavLink>
+                    {item.children ? (
+                        expandedSections[item.id] ? (
+                            <FiChevronDown size={16} />
+                        ) : (
+                            <FiChevronRight size={16} />
+                        )
+                    ) : null}
                 </div>
                 {item.children && expandedSections[item.id] && (
                     <ul className="ml-4">{renderNavItems(selectedSectionId, item.children)}</ul>
@@ -54,6 +54,7 @@ export default function NavigationSideBar() {
                         navigationData.Home,
                         navigationData.AboutMe,
                         navigationData.Blog,
+                        navigationData.Test,
                     ])}
                 </ul>
             </div>
