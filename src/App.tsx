@@ -3,6 +3,7 @@ import NavigationBar from "./HomePage/NavigationSideBar";
 import { BlogFrontPage } from "./Blog/BlogFrontPage";
 import { HomePage } from "./HomePage/HomePage";
 import { TestPage } from "./TestPage/TestPage";
+import { navigationData } from "./HomePage/NavigationTree";
 
 export default function App() {
     return (
@@ -13,9 +14,10 @@ export default function App() {
                 </div>
                 <div>
                     <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/blog" element={<BlogFrontPage />} />
-                        <Route path="/test" element={<TestPage />} />
+                        <Route path={navigationData.Home.path} element={<HomePage />} />
+                        <Route path={`${navigationData.Blog.path}/*`} element={<BlogFrontPage />} />
+                        <Route path={navigationData.Blog.path + "/power-electronics"} element={<BlogFrontPage />} />
+                        <Route path={navigationData.Test.path} element={<TestPage />} />
                     </Routes>
                     <footer className="bg-white border-t mt-12">
                         <div className="max-w-4xl mx-auto px-4 py-6">

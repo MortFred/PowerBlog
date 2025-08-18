@@ -1,13 +1,21 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { navigationData, NavigationItem } from "./NavigationTree";
 import { FiChevronRight, FiChevronDown } from "react-icons/fi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function NavigationSideBar() {
     const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+    const [activeSection, setActiveSection] = useState<string>("");
     const location = useLocation();
     const pathArray = location.pathname.split("/").filter(Boolean);
     const selectedSectionId = pathArray.join("-");
+
+    // Handle hash changes for section highlighting
+    useEffect(() => {
+        if (location.hash) {
+            setActiveSection(location.hash.substring(1));
+        }
+    }, [location.hash]);
 
     const toggleSection = (sectionId: string) => {
         setExpandedSections((prev: Record<string, boolean>) => ({
@@ -24,9 +32,11 @@ export default function NavigationSideBar() {
                     onClick={() => item.children && toggleSection(item.id)}
                 >
                     <NavLink
-                        to={`/${item.id.replace("-", "/")}`}
+                        to={`/${item.path}`}
                         className={({ isActive }) =>
-                            `text-gray-600 hover:text-gray-900 ${selectedSectionId === item.id ? "font-bold" : ""}`
+                            `text-gray-600 hover:text-gray-900 ${
+                                isActive || (activeSection && item.id.includes(activeSection)) ? "font-bold" : ""
+                            }`
                         }
                     >
                         {item.label}
@@ -40,7 +50,7 @@ export default function NavigationSideBar() {
                     ) : null}
                 </div>
                 {item.children && expandedSections[item.id] && (
-                    <ul className="ml-4">{renderNavItems(selectedSectionId, item.children)}</ul>
+                    <ul className="ml-4">{renderNavItems(selectedSectionId, Object.values(item.children))}</ul>
                 )}
             </li>
         ));
