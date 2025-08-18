@@ -1,17 +1,4 @@
-export interface NavigationItem {
-    id: string;
-    label: string;
-    children?: NavigationItem[];
-}
-
-type NavTree = {
-    Home: NavigationItem;
-    AboutMe: NavigationItem;
-    Blog: NavigationItem;
-    Test: NavigationItem;
-};
-
-export const navigationData: NavTree = {
+const siteStructure = {
     Home: {
         id: "home",
         label: "Home",
@@ -21,29 +8,30 @@ export const navigationData: NavTree = {
         label: "About Me",
     },
     Blog: {
-        id: "blog-root",
-        label: "Power Electronics",
-        children: [
-            {
-                id: "power-electronics-basics",
-                label: "Basics",
-                children: [
-                    { id: "introduction", label: "Introduction" },
-                    { id: "fundamentals", label: "Fundamentals" },
-                ],
+        id: "blog",
+        label: "Power Blog",
+        powerElectronics: {
+            id: "power-electronics",
+            label: "Power Electronics",
+            rectifierCircuits: {
+                id: "rectifier-circuits",
+                label: "Rectifier Circuits",
             },
-            {
-                id: "advanced-topics",
-                label: "Advanced Topics",
-                children: [
-                    { id: "converter-types", label: "Converter Types" },
-                    { id: "control-strategies", label: "Control Strategies" },
-                ],
-            },
-        ],
+        },
     },
     Test: {
         id: "test",
         label: "Test Page",
     },
 };
+
+function getSubComponentKeys(dict:any){
+    let keys = Object.keys(dict)
+    
+
+}
+
+function FormatSiteStructureLabels() {
+    let urlComponents = []
+    function 
+}
