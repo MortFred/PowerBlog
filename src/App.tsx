@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationBar from "./HomePage/NavigationSideBar";
+import navigationStructure, { siteStructure } from "./HomePage/NavigationTree";
 import { BlogFrontPage } from "./Blog/BlogFrontPage";
 import { HomePage } from "./HomePage/HomePage";
 import { TestPage } from "./TestPage/TestPage";
 
 export default function App() {
+    navigationStructure;
+
     return (
         <Router>
             <div className="grid grid-cols-[200px_1fr] gap-4">
@@ -13,7 +16,7 @@ export default function App() {
                 </div>
                 <div>
                     <Routes>
-                        <Route path="/" element={<HomePage />} />
+                        <Route path={siteStructure.Home.id} element={<HomePage />} />
                         <Route path="/blog" element={<BlogFrontPage />} />
                         <Route path="/test" element={<TestPage />} />
                     </Routes>
